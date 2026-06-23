@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 1 - Transformer les demandes vagues</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0f0f0f;
+  --card: #1a1816;
+  --card-border: #2a2622;
+  --text: #e8e4df;
+  --muted: #6b6560;
+  --accent: #d4a574;
+  --pink: #e8b4b8;
+  --gold: #c9b896;
+  --success: #7a9e7e;
+  --radius: 12px;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'IBM Plex Sans', sans-serif;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+header {
+  text-align: center;
+  padding: 3rem 1.5rem 2rem;
+  position: relative;
+}
+
+header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+
+.module-label {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+}
+
+header h1 {
+  font-family: 'Cormorant', serif;
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
+  font-weight: 400;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+header p {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-top: 0.75rem;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.progress-bar {
+  max-width: 700px;
+  margin: 2rem auto 0;
+  padding: 0 1.5rem;
+}
+
+.progress-track {
+  height: 3px;
+  background: var(--card-border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--gold));
+  border-radius: 2px;
+  transition: width 0.5s ease;
+  width: 0%;
+}
+
+.progress-text {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-top: 0.5rem;
+  text-align: right;
+}
+
+main {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.exercise-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  transition: border-color 0.3s;
+}
+
+.exercise-card:hover {
+  border-color: #3a3530;
+}
+
+.card-number {
+  font-family: 'Cormorant', serif;
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.card-number .num {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.vague-question {
+  font-family: 'Cormorant', serif;
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
+  font-weight: 500;
+  font-style: italic;
+  color: var(--pink);
+  margin-bottom: 1.5rem;
+  line-height: 1.4;
+  padding-left: 1rem;
+  border-left: 2px solid var(--accent);
+}
+
+label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+textarea {
+  width: 100%;
+  min-height: 100px;
+  background: var(--bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.95rem;
+  padding: 1rem;
+  resize: vertical;
+  transition: border-color 0.3s;
+  line-height: 1.6;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+textarea::placeholder {
+  color: var(--muted);
+  opacity: 0.5;
+}
+
+.btn-row {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.6rem 1.25rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s;
+  letter-spacing: 0.02em;
+}
+
+.btn-reveal {
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+}
+
+.btn-reveal:hover {
+  background: rgba(212, 165, 116, 0.1);
+}
+
+.btn-reveal.revealed {
+  border-color: var(--muted);
+  color: var(--muted);
+}
+
+.model-answer {
+  margin-top: 1.25rem;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease, opacity 0.4s ease;
+  opacity: 0;
+}
+
+.model-answer.visible {
+  max-height: 300px;
+  opacity: 1;
+}
+
+.answer-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--gold);
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.answer-text {
+  font-family: 'Cormorant', serif;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--text);
+  padding: 1rem 1.25rem;
+  background: rgba(201, 184, 150, 0.06);
+  border-radius: 8px;
+  border-left: 2px solid var(--gold);
+}
+
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+.btn-save {
+  background: var(--accent);
+  color: var(--bg);
+  font-weight: 600;
+}
+
+.btn-save:hover {
+  filter: brightness(1.1);
+}
+
+.btn-clear {
+  background: transparent;
+  border: 1px solid var(--card-border);
+  color: var(--muted);
+}
+
+.btn-clear:hover {
+  border-color: var(--muted);
+  color: var(--text);
+}
+
+.save-indicator {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--success);
+  opacity: 0;
+  transition: opacity 0.3s;
+  margin-top: 0.5rem;
+}
+
+.save-indicator.show {
+  opacity: 1;
+}
+
+footer {
+  text-align: center;
+  padding: 2rem 1.5rem;
+  border-top: 1px solid var(--card-border);
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+footer p {
+  font-family: 'Cormorant', serif;
+  font-size: 0.9rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+@media (max-width: 480px) {
+  .exercise-card { padding: 1.25rem; }
+  textarea { min-height: 80px; font-size: 0.9rem; }
+  .btn { padding: 0.5rem 1rem; font-size: 0.75rem; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="module-label">Module 1</div>
+  <h1>Transformer les demandes vagues</h1>
+  <p>Reformulez chaque question vague en une question de synastrie exploitable, puis comparez avec la suggestion.</p>
+</header>
+
+<div class="progress-bar">
+  <div class="progress-track">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+  <div class="progress-text" id="progressText">0 / 5 reponses</div>
+</div>
+
+<main id="exercises"></main>
+
+<div class="actions">
+  <button class="btn btn-save" onclick="saveAll()">Sauvegarder</button>
+  <button class="btn btn-clear" onclick="clearAll()">Effacer tout</button>
+</div>
+<div class="save-indicator" id="saveIndicator">Sauvegarde reussie</div>
+
+<footer>
+  <p>Module 1 - Atelier pratique de synastrie</p>
+</footer>
+
+<script>
+const EXERCISES = [
+  {
+    id: 1,
+    vague: "Sommes-nous faits l'un pour l'autre ?",
+    model: "Qu'est-ce qui nous attire l'un vers l'autre, et ce qui nous eloigne ? La question n'est pas 'faits pour' mais 'pourquoi ensemble, et a quel prix ?'"
+  },
+  {
+    id: 2,
+    vague: "Pourquoi cette relation me marque autant ?",
+    model: "Qu'est-ce que cette personne active chez moi ? Quels besoins inconscients rencontre-t-elle en moi ?"
+  },
+  {
+    id: 3,
+    vague: "Est-ce que cette relation peut durer ?",
+    model: "Quels sont les facteurs de stabilite et de fragilite dans cette synastrie ? Que change le contexte de vie actuel ?"
+  },
+  {
+    id: 4,
+    vague: "Je ne comprends pas pourquoi on s'est separes",
+    model: "Qu'est-ce qui a fait tenir la relation au debut, et qu'est-ce qui a cesse de fonctionner ? La rupture est-elle inscrite dans la dynamique synastrique ou liee au contexte ?"
+  },
+  {
+    id: 5,
+    vague: "Il me manque quelque chose dans ma relation",
+    model: "Quel besoin specifique n'est pas nourri ? Est-ce un besoin affectif (Lune), de valorisation (Venus), d'action (Mars) ou de securite (Saturne) ?"
+  }
+];
+
+const STORAGE_KEY = 'synastrie-module1';
+
+function render() {
+  const container = document.getElementById('exercises');
+  const saved = loadSaved();
+
+  container.innerHTML = EXERCISES.map((ex, i) => `
+    <div class="exercise-card" id="card-${ex.id}">
+      <div class="card-number">Question <span class="num">${i + 1}</span> / 5</div>
+      <div class="vague-question">${ex.vague}</div>
+      <label for="answer-${ex.id}">Votre reformulation</label>
+      <textarea
+        id="answer-${ex.id}"
+        placeholder="Ecrivez votre reformulation ici..."
+        oninput="onInput(${ex.id})"
+      >${saved.answers[ex.id] || ''}</textarea>
+      <div class="btn-row">
+        <button class="btn btn-reveal" id="reveal-${ex.id}" onclick="toggleReveal(${ex.id})">
+          Voir la suggestion
+        </button>
+      </div>
+      <div class="model-answer" id="model-${ex.id}">
+        <div class="answer-label">Suggestion</div>
+        <div class="answer-text">${ex.model}</div>
+      </div>
+    </div>
+  `).join('');
+
+  if (saved.revealed) {
+    saved.revealed.forEach(id => {
+      const el = document.getElementById('model-' + id);
+      const btn = document.getElementById('reveal-' + id);
+      if (el) el.classList.add('visible');
+      if (btn) { btn.textContent = 'Masquer la suggestion'; btn.classList.add('revealed'); }
+    });
+  }
+
+  updateProgress();
+}
+
+function onInput(id) {
+  autoSave();
+  updateProgress();
+}
+
+function toggleReveal(id) {
+  const el = document.getElementById('model-' + id);
+  const btn = document.getElementById('reveal-' + id);
+  const isVisible = el.classList.contains('visible');
+
+  if (isVisible) {
+    el.classList.remove('visible');
+    btn.textContent = 'Voir la suggestion';
+    btn.classList.remove('revealed');
+  } else {
+    el.classList.add('visible');
+    btn.textContent = 'Masquer la suggestion';
+    btn.classList.add('revealed');
+  }
+
+  autoSave();
+}
+
+function updateProgress() {
+  let count = 0;
+  EXERCISES.forEach(ex => {
+    const val = document.getElementById('answer-' + ex.id)?.value?.trim();
+    if (val && val.length > 5) count++;
+  });
+  const pct = (count / EXERCISES.length) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = count + ' / 5 reponses';
+}
+
+function getAnswers() {
+  const answers = {};
+  EXERCISES.forEach(ex => {
+    answers[ex.id] = document.getElementById('answer-' + ex.id)?.value || '';
+  });
+  return answers;
+}
+
+function getRevealed() {
+  const revealed = [];
+  EXERCISES.forEach(ex => {
+    if (document.getElementById('model-' + ex.id)?.classList.contains('visible')) {
+      revealed.push(ex.id);
+    }
+  });
+  return revealed;
+}
+
+function autoSave() {
+  const data = { answers: getAnswers(), revealed: getRevealed() };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function saveAll() {
+  autoSave();
+  const ind = document.getElementById('saveIndicator');
+  ind.classList.add('show');
+  setTimeout(() => ind.classList.remove('show'), 2000);
+}
+
+function loadSaved() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return { answers: {}, revealed: [] };
+}
+
+function clearAll() {
+  if (!confirm('Effacer toutes vos reponses ?')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  render();
+}
+
+render();
+</script>
+</body>
+</html>

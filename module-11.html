@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 11 - Éthique et limites de la synastrie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0f0f0f;
+  --card: #1a1816;
+  --card-border: #2a2622;
+  --text: #e8e4df;
+  --muted: #6b6560;
+  --accent: #d4a574;
+  --pink: #e8b4b8;
+  --gold: #c9b896;
+  --blue: #7ba0b8;
+  --sage: #8aaa8a;
+  --red: #c87070;
+  --radius: 12px;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'IBM Plex Sans', sans-serif;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+header {
+  text-align: center;
+  padding: 3rem 1.5rem 2rem;
+  position: relative;
+}
+
+header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+
+.module-label {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+}
+
+header h1 {
+  font-family: 'Cormorant', serif;
+  font-size: clamp(1.5rem, 4.5vw, 2.3rem);
+  font-weight: 400;
+  color: var(--text);
+  line-height: 1.25;
+}
+
+header p {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-top: 0.75rem;
+  max-width: 620px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.progress-bar {
+  max-width: 780px;
+  margin: 2rem auto 0;
+  padding: 0 1.5rem;
+}
+
+.progress-track {
+  height: 3px;
+  background: var(--card-border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--gold));
+  border-radius: 2px;
+  transition: width 0.5s ease;
+  width: 0%;
+}
+
+.progress-text {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-top: 0.5rem;
+  text-align: right;
+}
+
+main {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.reform-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  transition: border-color 0.3s;
+}
+
+.reform-card:hover {
+  border-color: #3a3530;
+}
+
+.reform-header {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-bottom: 1rem;
+}
+
+.reform-num {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Cormorant', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  flex-shrink: 0;
+  background: rgba(200, 112, 112, 0.12);
+  color: var(--red);
+  border: 1px solid rgba(200, 112, 112, 0.2);
+}
+
+.reform-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.danger-quote {
+  font-family: 'Cormorant', serif;
+  font-size: 1.08rem;
+  line-height: 1.65;
+  color: var(--red);
+  padding: 1rem 1.25rem;
+  background: rgba(200, 112, 112, 0.06);
+  border-radius: 8px;
+  border-left: 2px solid var(--red);
+  margin-bottom: 1.25rem;
+  font-style: italic;
+}
+
+.danger-label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  color: var(--red);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.danger-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--red);
+}
+
+.reform-prompt {
+  font-family: 'Cormorant', serif;
+  font-size: 0.95rem;
+  color: var(--muted);
+  margin-bottom: 0.75rem;
+  font-style: italic;
+}
+
+textarea {
+  width: 100%;
+  min-height: 90px;
+  background: var(--bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.95rem;
+  padding: 0.85rem 1rem;
+  resize: vertical;
+  transition: border-color 0.3s;
+  line-height: 1.6;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+textarea::placeholder {
+  color: var(--muted);
+  opacity: 0.5;
+}
+
+.btn-row {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.6rem 1.25rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s;
+  letter-spacing: 0.02em;
+}
+
+.btn-reveal {
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+}
+
+.btn-reveal:hover {
+  background: rgba(212, 165, 116, 0.1);
+}
+
+.btn-reveal.revealed {
+  border-color: var(--muted);
+  color: var(--muted);
+}
+
+.model-answer {
+  margin-top: 1rem;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.6s ease, opacity 0.4s ease;
+  opacity: 0;
+}
+
+.model-answer.visible {
+  max-height: 600px;
+  opacity: 1;
+}
+
+.answer-divider {
+  height: 1px;
+  background: var(--card-border);
+  margin-bottom: 0.85rem;
+}
+
+.answer-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--sage);
+}
+
+.answer-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--sage);
+}
+
+.answer-text {
+  font-family: 'Cormorant', serif;
+  font-size: 1.02rem;
+  line-height: 1.7;
+  color: var(--text);
+  padding: 0.85rem 1.1rem;
+  background: rgba(138, 170, 138, 0.06);
+  border-radius: 8px;
+  border-left: 2px solid var(--sage);
+}
+
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+.btn-save {
+  background: var(--accent);
+  color: var(--bg);
+  font-weight: 600;
+}
+
+.btn-save:hover {
+  filter: brightness(1.1);
+}
+
+.btn-clear {
+  background: transparent;
+  border: 1px solid var(--card-border);
+  color: var(--muted);
+}
+
+.btn-clear:hover {
+  border-color: var(--muted);
+  color: var(--text);
+}
+
+.save-indicator {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--sage);
+  opacity: 0;
+  transition: opacity 0.3s;
+  margin-top: 0.5rem;
+}
+
+.save-indicator.show {
+  opacity: 1;
+}
+
+footer {
+  text-align: center;
+  padding: 2rem 1.5rem;
+  border-top: 1px solid var(--card-border);
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+footer p {
+  font-family: 'Cormorant', serif;
+  font-size: 0.9rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+@media (max-width: 560px) {
+  .reform-card { padding: 1.25rem; }
+  textarea { min-height: 75px; font-size: 0.9rem; }
+  .btn { padding: 0.5rem 1rem; font-size: 0.75rem; }
+  .danger-quote { font-size: 1rem; padding: 0.85rem 1rem; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="module-label">Module 11</div>
+  <h1>Éthique et limites de la synastrie</h1>
+  <p>Reformulez des conclusions trop tranchées en formulations éthiques et utiles.</p>
+</header>
+
+<div class="progress-bar">
+  <div class="progress-track">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+  <div class="progress-text" id="progressText">0 / 5 champs remplis</div>
+</div>
+
+<main id="exercises"></main>
+
+<div class="actions">
+  <button class="btn btn-save" onclick="saveAll()">Sauvegarder</button>
+  <button class="btn btn-clear" onclick="clearAll()">Effacer tout</button>
+</div>
+<div class="save-indicator" id="saveIndicator">Sauvegarde réussie</div>
+
+<footer>
+  <p>Module 11 - Atelier pratique de synastrie</p>
+</footer>
+
+<script>
+const STORAGE_KEY = 'synastrie-module11';
+const TOTAL_FIELDS = 5;
+
+const REFORMULATIONS = [
+  {
+    id: 1,
+    danger: 'Votre mariage est condamné, Saturne carré Lune ne pardonne pas.',
+    prompt: 'Reformulez cette conclusion de façon éthique et utile.',
+    placeholder: 'Réécrivez cette formulation en respectant le cadre éthique de la synastrie...',
+    model: 'La relation rencontre une tension durable entre le besoin de structure de l\'un et la sensibilité de l\'autre. Ce n\'est pas fatal, mais ça demande un travail conscient.'
+  },
+  {
+    id: 2,
+    danger: 'Il ne vous aimera jamais, Vénus en Scorpion ne peut pas aimer Vénus en Gémeaux.',
+    prompt: 'Reformulez cette conclusion de façon éthique et utile.',
+    placeholder: 'Réécrivez cette formulation en respectant le cadre éthique de la synastrie...',
+    model: 'Vous n\'exprimez pas l\'amour de la même façon. Ce n\'est pas un manque d\'amour, c\'est un langage différent. L\'enjeu : apprendre à se comprendre.'
+  },
+  {
+    id: 3,
+    danger: 'Vous êtes karmiquement liés, Pluton sur le Soleil signifie que vous ne pourrez jamais vous quitter.',
+    prompt: 'Reformulez cette conclusion de façon éthique et utile.',
+    placeholder: 'Réécrivez cette formulation en respectant le cadre éthique de la synastrie...',
+    model: 'Cette relation a une intensité transformante. Elle vous change profondément l\'un et l\'autre. Ce n\'est pas une prison, mais un passage. La liberté de partir existe toujours.'
+  },
+  {
+    id: 4,
+    danger: 'Cet enfant vous déteste, Mars en maison XII c\'est la guerre cachée.',
+    prompt: 'Reformulez cette conclusion de façon éthique et utile.',
+    placeholder: 'Réécrivez cette formulation en respectant le cadre éthique de la synastrie...',
+    model: 'L\'enfant porte une énergie vive dans une zone de votre thème qui vous échappe. Ce n\'est pas de la haine, c\'est une dynamique inconsciente qui demande à être éclairée.'
+  },
+  {
+    id: 5,
+    danger: 'Votre thème ensemble est catastrophique, je vous déconseille cette relation.',
+    prompt: 'Reformulez cette conclusion de façon éthique et utile.',
+    placeholder: 'Réécrivez cette formulation en respectant le cadre éthique de la synastrie...',
+    model: 'La synastrie montre des tensions réelles et des fragilités. Ce n\'est pas à moi de décider si la relation vaut la peine. Mon rôle est de vous éclairer sur les dynamiques pour que vous choisisserez en conscience.'
+  }
+];
+
+function buildReformCard(r) {
+  const textareaId = `reform-${r.id}`;
+  const modelId = `model-${r.id}`;
+  const revealId = `reveal-${r.id}`;
+
+  return `<div class="reform-card" id="card-${r.id}">
+    <div class="reform-header">
+      <div class="reform-num">${r.id}</div>
+      <div class="reform-label">Formulation à reformuler</div>
+    </div>
+
+    <div class="danger-label"><span class="danger-dot"></span> Formulation dangereuse</div>
+    <div class="danger-quote">${r.danger}</div>
+
+    <div class="reform-prompt">${r.prompt}</div>
+
+    <textarea
+      id="${textareaId}"
+      placeholder="${r.placeholder}"
+      oninput="onInput()"
+    ></textarea>
+
+    <div class="btn-row">
+      <button class="btn btn-reveal" id="${revealId}" onclick="toggleReveal('${modelId}', '${revealId}')">
+        Voir la reformulation modèle
+      </button>
+    </div>
+
+    <div class="model-answer" id="${modelId}">
+      <div class="answer-divider"></div>
+      <div class="answer-label"><span class="answer-dot"></span> Reformulation éthique</div>
+      <div class="answer-text">${r.model}</div>
+    </div>
+  </div>`;
+}
+
+function render() {
+  const container = document.getElementById('exercises');
+  const saved = loadSaved();
+
+  container.innerHTML = REFORMULATIONS.map(r => buildReformCard(r)).join('');
+
+  REFORMULATIONS.forEach(r => {
+    const taId = `reform-${r.id}`;
+    const el = document.getElementById(taId);
+    if (el && saved.answers[taId]) el.value = saved.answers[taId];
+  });
+
+  if (saved.revealed) {
+    saved.revealed.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('visible');
+      const btnId = id.replace('model-', 'reveal-');
+      const btn = document.getElementById(btnId);
+      if (btn) { btn.textContent = 'Masquer la reformulation modèle'; btn.classList.add('revealed'); }
+    });
+  }
+
+  updateProgress();
+}
+
+function onInput() {
+  autoSave();
+  updateProgress();
+}
+
+function toggleReveal(modelId, revealId) {
+  const el = document.getElementById(modelId);
+  const btn = document.getElementById(revealId);
+  const isVisible = el.classList.contains('visible');
+
+  if (isVisible) {
+    el.classList.remove('visible');
+    btn.textContent = 'Voir la reformulation modèle';
+    btn.classList.remove('revealed');
+  } else {
+    el.classList.add('visible');
+    btn.textContent = 'Masquer la reformulation modèle';
+    btn.classList.add('revealed');
+  }
+
+  autoSave();
+}
+
+function updateProgress() {
+  let count = 0;
+  REFORMULATIONS.forEach(r => {
+    const val = document.getElementById(`reform-${r.id}`)?.value?.trim();
+    if (val && val.length > 10) count++;
+  });
+  const pct = (count / TOTAL_FIELDS) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = count + ' / ' + TOTAL_FIELDS + ' champs remplis';
+}
+
+function getAnswers() {
+  const answers = {};
+  REFORMULATIONS.forEach(r => {
+    const taId = `reform-${r.id}`;
+    answers[taId] = document.getElementById(taId)?.value || '';
+  });
+  return answers;
+}
+
+function getRevealed() {
+  const revealed = [];
+  REFORMULATIONS.forEach(r => {
+    const modelId = `model-${r.id}`;
+    if (document.getElementById(modelId)?.classList.contains('visible')) {
+      revealed.push(modelId);
+    }
+  });
+  return revealed;
+}
+
+function autoSave() {
+  const data = { answers: getAnswers(), revealed: getRevealed() };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function saveAll() {
+  autoSave();
+  const ind = document.getElementById('saveIndicator');
+  ind.classList.add('show');
+  setTimeout(() => ind.classList.remove('show'), 2000);
+}
+
+function loadSaved() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return { answers: {}, revealed: [] };
+}
+
+function clearAll() {
+  if (!confirm('Effacer toutes vos reformulations ?')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  render();
+}
+
+render();
+</script>
+</body>
+</html>

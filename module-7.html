@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 7 - Identifier les facteurs de durée, de blocage et de crise</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0f0f0f;
+  --card: #1a1816;
+  --card-border: #2a2622;
+  --text: #e8e4df;
+  --muted: #6b6560;
+  --accent: #d4a574;
+  --pink: #e8b4b8;
+  --gold: #c9b896;
+  --blue: #7ba0b8;
+  --sage: #8aaa8a;
+  --red: #c87070;
+  --radius: 12px;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'IBM Plex Sans', sans-serif;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+header {
+  text-align: center;
+  padding: 3rem 1.5rem 2rem;
+  position: relative;
+}
+
+header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+
+.module-label {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+}
+
+header h1 {
+  font-family: 'Cormorant', serif;
+  font-size: clamp(1.5rem, 4.5vw, 2.3rem);
+  font-weight: 400;
+  color: var(--text);
+  line-height: 1.25;
+}
+
+header p {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-top: 0.75rem;
+  max-width: 620px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.progress-bar {
+  max-width: 780px;
+  margin: 2rem auto 0;
+  padding: 0 1.5rem;
+}
+
+.progress-track {
+  height: 3px;
+  background: var(--card-border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--gold));
+  border-radius: 2px;
+  transition: width 0.5s ease;
+  width: 0%;
+}
+
+.progress-text {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-top: 0.5rem;
+  text-align: right;
+}
+
+main {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.scenario-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  transition: border-color 0.3s;
+}
+
+.scenario-card:hover {
+  border-color: #3a3530;
+}
+
+.scenario-title {
+  font-family: 'Cormorant', serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.scenario-title .num {
+  color: var(--accent);
+}
+
+.planets-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.planet-col {
+  background: rgba(15, 15, 15, 0.6);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 1.25rem;
+}
+
+.planet-col-label {
+  font-family: 'Cormorant', serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.planet-col-label.label-a { color: var(--pink); }
+.planet-col-label.label-b { color: var(--blue); }
+
+.planet-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.55rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.planet-row:last-child { margin-bottom: 0; }
+
+.planet-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+  width: 1.2rem;
+  text-align: center;
+}
+
+.planet-icon.icon-jupiter { color: var(--gold); }
+.planet-icon.icon-saturne { color: var(--muted); }
+.planet-icon.icon-uranus { color: var(--blue); }
+.planet-icon.icon-neptune { color: var(--pink); }
+.planet-icon.icon-pluton { color: var(--red); }
+
+.planet-name {
+  font-weight: 500;
+  color: var(--text);
+}
+
+.planet-in {
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-style: italic;
+}
+
+.planet-sign {
+  color: var(--text);
+  font-weight: 400;
+}
+
+.vs-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  grid-column: 1 / -1;
+  margin: -0.25rem 0;
+}
+
+.vs-text {
+  font-family: 'Cormorant', serif;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--muted);
+  opacity: 0.5;
+}
+
+.aspects-section {
+  background: rgba(15, 15, 15, 0.5);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.75rem;
+}
+
+.aspects-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 500;
+  color: var(--muted);
+  margin-bottom: 0.65rem;
+}
+
+.aspect-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.88rem;
+  margin-bottom: 0.4rem;
+  line-height: 1.5;
+}
+
+.aspect-row:last-child { margin-bottom: 0; }
+
+.aspect-type {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.1rem 0.5rem;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.aspect-type.type-opposition { background: rgba(200, 112, 112, 0.15); color: var(--red); }
+.aspect-type.type-carre { background: rgba(212, 165, 116, 0.15); color: var(--accent); }
+.aspect-type.type-trigone { background: rgba(138, 170, 138, 0.15); color: var(--sage); }
+.aspect-type.type-conjonction { background: rgba(201, 184, 150, 0.15); color: var(--gold); }
+.aspect-type.type-sextile { background: rgba(123, 160, 184, 0.15); color: var(--blue); }
+
+.aspect-desc {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.question-card {
+  background: rgba(15, 15, 15, 0.4);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.3s;
+}
+
+.question-card:hover {
+  border-color: #3a3530;
+}
+
+.question-header {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-bottom: 0.85rem;
+}
+
+.question-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.question-icon.qi-duree { background: rgba(201, 184, 150, 0.15); color: var(--gold); }
+.question-icon.qi-tension { background: rgba(200, 112, 112, 0.15); color: var(--red); }
+.question-icon.qi-instabilite { background: rgba(123, 160, 184, 0.15); color: var(--blue); }
+.question-icon.qi-transformation { background: rgba(138, 170, 138, 0.15); color: var(--sage); }
+
+.question-text {
+  font-family: 'Cormorant', serif;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--text);
+  line-height: 1.4;
+}
+
+.question-sub {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-top: 0.2rem;
+  font-style: italic;
+}
+
+textarea {
+  width: 100%;
+  min-height: 90px;
+  background: var(--bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.95rem;
+  padding: 0.85rem 1rem;
+  resize: vertical;
+  transition: border-color 0.3s;
+  line-height: 1.6;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+textarea::placeholder {
+  color: var(--muted);
+  opacity: 0.5;
+}
+
+.btn-row {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.6rem 1.25rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s;
+  letter-spacing: 0.02em;
+}
+
+.btn-reveal {
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+}
+
+.btn-reveal:hover {
+  background: rgba(212, 165, 116, 0.1);
+}
+
+.btn-reveal.revealed {
+  border-color: var(--muted);
+  color: var(--muted);
+}
+
+.model-answer {
+  margin-top: 1rem;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.6s ease, opacity 0.4s ease;
+  opacity: 0;
+}
+
+.model-answer.visible {
+  max-height: 600px;
+  opacity: 1;
+}
+
+.answer-divider {
+  height: 1px;
+  background: var(--card-border);
+  margin-bottom: 0.85rem;
+}
+
+.answer-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--gold);
+}
+
+.answer-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+
+.answer-text {
+  font-family: 'Cormorant', serif;
+  font-size: 1.02rem;
+  line-height: 1.7;
+  color: var(--text);
+  padding: 0.85rem 1.1rem;
+  background: rgba(201, 184, 150, 0.05);
+  border-radius: 8px;
+  border-left: 2px solid var(--gold);
+}
+
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+.btn-save {
+  background: var(--accent);
+  color: var(--bg);
+  font-weight: 600;
+}
+
+.btn-save:hover {
+  filter: brightness(1.1);
+}
+
+.btn-clear {
+  background: transparent;
+  border: 1px solid var(--card-border);
+  color: var(--muted);
+}
+
+.btn-clear:hover {
+  border-color: var(--muted);
+  color: var(--text);
+}
+
+.save-indicator {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--sage);
+  opacity: 0;
+  transition: opacity 0.3s;
+  margin-top: 0.5rem;
+}
+
+.save-indicator.show {
+  opacity: 1;
+}
+
+footer {
+  text-align: center;
+  padding: 2rem 1.5rem;
+  border-top: 1px solid var(--card-border);
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+footer p {
+  font-family: 'Cormorant', serif;
+  font-size: 0.9rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+@media (max-width: 560px) {
+  .planets-grid {
+    grid-template-columns: 1fr;
+  }
+  .scenario-card { padding: 1.25rem; }
+  .planet-col { padding: 1rem; }
+  .question-card { padding: 1.1rem; }
+  textarea { min-height: 75px; font-size: 0.9rem; }
+  .btn { padding: 0.5rem 1rem; font-size: 0.75rem; }
+  .vs-divider { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="module-label">Module 7</div>
+  <h1>Identifier les facteurs de durée, de blocage et de crise</h1>
+  <p>Identifiez dans chaque synastrie : un facteur de durée, un facteur de tension, un facteur d'instabilité, un facteur de transformation.</p>
+</header>
+
+<div class="progress-bar">
+  <div class="progress-track">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+  <div class="progress-text" id="progressText">0 / 8 champs remplis</div>
+</div>
+
+<main id="exercises"></main>
+
+<div class="actions">
+  <button class="btn btn-save" onclick="saveAll()">Sauvegarder</button>
+  <button class="btn btn-clear" onclick="clearAll()">Effacer tout</button>
+</div>
+<div class="save-indicator" id="saveIndicator">Sauvegarde réussie</div>
+
+<footer>
+  <p>Module 7 - Atelier pratique de synastrie</p>
+</footer>
+
+<script>
+const SIGNS = {
+  'Bélier': '♈', 'Taureau': '♉', 'Gémeaux': '♊', 'Cancer': '♋',
+  'Lion': '♌', 'Vierge': '♍', 'Balance': '♎', 'Scorpion': '♏',
+  'Sagittaire': '♐', 'Capricorne': '♑', 'Verseau': '♒', 'Poissons': '♓'
+};
+
+const CATEGORY_KEYS = ['duree', 'tension', 'instabilite', 'transformation'];
+
+const SCENARIOS = [
+  {
+    id: 1,
+    title: 'Carine et Carl',
+    personA: {
+      name: 'Carine',
+      jupiter: 'Vierge',
+      saturne: 'Gémeaux',
+      uranus: 'Vierge',
+      pluton: 'Vierge'
+    },
+    personB: {
+      name: 'Carl',
+      jupiter: 'Capricorne',
+      saturne: 'Scorpion',
+      uranus: 'Cancer'
+    },
+    aspects: [
+      { planetA: 'Jupiter Carine', planetB: 'Jupiter Carl', type: 'trigone' },
+      { planetA: 'Saturne Carine', planetB: 'Saturne Carl', type: 'sextile' },
+      { planetA: 'Uranus Carine', planetB: 'Uranus Carl', type: 'carre' },
+      { planetA: 'Neptune Carine', planetB: 'Neptune Carl', type: 'opposition' }
+    ],
+    noteA: 'Uranus et Pluton conjoints en Vierge',
+    questions: [
+      {
+        key: 'duree',
+        icon: '◈',
+        iconClass: 'qi-duree',
+        text: 'Facteur de durée',
+        sub: 'Qu\'est-ce qui soutient la relation dans le temps ?',
+        placeholder: 'Identifiez les aspects qui favorisent la durée, la loyauté, la construction...',
+        model: 'Saturne sextile = engagement naturel, loyauté, construction patiente. Jupiter trigone = soutien mutuel dans l\'ambition.'
+      },
+      {
+        key: 'tension',
+        icon: '⊛',
+        iconClass: 'qi-tension',
+        text: 'Facteur de tension',
+        sub: 'Qu\'est-ce qui bloque ou rigidifie la relation ?',
+        placeholder: 'Identifiez les sources de blocage, de peur, de rigidité...',
+        model: 'Saturne en Scorpion chez Carl = rigidité émotionnelle, peur de la vulnérabilité. Carine sent le mur.'
+      },
+      {
+        key: 'instabilite',
+        icon: '⚹',
+        iconClass: 'qi-instabilite',
+        text: 'Facteur d\'instabilité',
+        sub: 'Qu\'est-ce qui déstabilise le quotidien ?',
+        placeholder: 'Identifiez les sources d\'imprévu, de disruption, de rupture de rythme...',
+        model: 'Uranus carré = besoin de liberté vs besoin de sécurité. Imprévus qui déstabilisent le quotidien.'
+      },
+      {
+        key: 'transformation',
+        icon: '⟡',
+        iconClass: 'qi-transformation',
+        text: 'Facteur de transformation',
+        sub: 'Qu\'est-ce qui transforme profondément la relation ?',
+        placeholder: 'Identifiez les processus de métamorphose, de mort/renaissance...',
+        model: 'Neptune opposition = idéalisation initiale, puis désillusion. La projection ne tient pas.'
+      }
+    ]
+  },
+  {
+    id: 2,
+    title: 'Carine et Valentin',
+    personA: {
+      name: 'Carine',
+      jupiter: 'Vierge',
+      saturne: 'Gémeaux'
+    },
+    personB: {
+      name: 'Valentin',
+      jupiter: 'Sagittaire',
+      saturne: 'Sagittaire',
+      pluton: 'Vierge'
+    },
+    aspects: [
+      { planetA: 'Jupiter Carine', planetB: 'Jupiter Valentin', type: 'opposition' },
+      { planetA: 'Saturne Carine', planetB: 'Saturne Valentin', type: 'carre' },
+      { planetA: 'Pluton Valentin', planetB: 'Soleil Carine', type: 'conjonction' }
+    ],
+    noteA: '',
+    noteB: 'Pluton en Vierge conjoint au Soleil de Carine',
+    questions: [
+      {
+        key: 'duree',
+        icon: '◈',
+        iconClass: 'qi-duree',
+        text: 'Facteur de durée',
+        sub: 'Qu\'est-ce qui soutient la relation dans le temps ?',
+        placeholder: 'Identifiez les aspects qui favorisent la durée, la loyauté, la construction...',
+        model: 'Peu de facteurs de durée naturels. Le Jupiter opposé et le Saturne carré ne facilitent pas l\'ancrage. La relation tient par l\'intensité, pas par la stabilité.'
+      },
+      {
+        key: 'tension',
+        icon: '⊛',
+        iconClass: 'qi-tension',
+        text: 'Facteur de tension',
+        sub: 'Qu\'est-ce qui bloque ou rigidifie la relation ?',
+        placeholder: 'Identifiez les sources de blocage, de peur, de rigidité...',
+        model: 'Saturne en Sagittaire chez Valentin = engagement idéologique mais pas concret. Il croit en la relation comme idée, pas comme pratique. Carine attend des actes, Valentin offre des principes.'
+      },
+      {
+        key: 'instabilite',
+        icon: '⚹',
+        iconClass: 'qi-instabilite',
+        text: 'Facteur d\'instabilité',
+        sub: 'Qu\'est-ce qui déstabilise le quotidien ?',
+        placeholder: 'Identifiez les sources d\'imprévu, de disruption, de rupture de rythme...',
+        model: 'Jupiter opposé = expansion aventureuse de Valentin vs prudence de Carine. Deux rythmes de croissance radicalement différents. L\'un veut explorer, l\'autre veut consolider.'
+      },
+      {
+        key: 'transformation',
+        icon: '⟡',
+        iconClass: 'qi-transformation',
+        text: 'Facteur de transformation',
+        sub: 'Qu\'est-ce qui transforme profondément la relation ?',
+        placeholder: 'Identifiez les processus de métamorphose, de mort/renaissance...',
+        model: 'Pluton conjoint Soleil Carine = transformation radicale de l\'identité de Carine. Valentin déclenche en elle un processus de mort/renaissance. La relation ne laisse pas intacte.'
+      }
+    ]
+  }
+];
+
+const STORAGE_KEY = 'synastrie-module7';
+const TOTAL_FIELDS = SCENARIOS.length * 4;
+
+const ASPECT_LABELS = {
+  opposition: 'Opposition',
+  carre: 'Carré',
+  trigone: 'Trigone',
+  conjonction: 'Conjonction',
+  sextile: 'Sextile'
+};
+
+const PLANET_CONFIG = {
+  jupiter: { icon: '♃', iconClass: 'icon-jupiter', label: 'Jupiter' },
+  saturne: { icon: '♄', iconClass: 'icon-saturne', label: 'Saturne' },
+  uranus: { icon: '♅', iconClass: 'icon-uranus', label: 'Uranus' },
+  neptune: { icon: '♆', iconClass: 'icon-neptune', label: 'Neptune' },
+  pluton: { icon: '♇', iconClass: 'icon-pluton', label: 'Pluton' }
+};
+
+function buildPlanetCol(person, cls) {
+  const keys = Object.keys(PLANET_CONFIG).filter(k => person[k]);
+  const rows = keys.map(k => {
+    const cfg = PLANET_CONFIG[k];
+    return `<div class="planet-row">
+      <span class="planet-icon ${cfg.iconClass}">${cfg.icon}</span>
+      <span class="planet-name">${cfg.label}</span>
+      <span class="planet-in">en</span>
+      <span class="planet-sign">${person[k]} ${SIGNS[person[k]] || ''}</span>
+    </div>`;
+  }).join('');
+
+  let noteHtml = '';
+  if (person === SCENARIOS[0].personA && SCENARIOS[0].noteA) {
+    noteHtml = `<div class="planet-row" style="margin-top:0.4rem;"><span style="color:var(--red);font-size:0.8rem;font-style:italic;">${SCENARIOS[0].noteA}</span></div>`;
+  }
+
+  return `<div class="planet-col">
+    <div class="planet-col-label ${cls}">${person.name}</div>
+    ${rows}
+    ${noteHtml}
+  </div>`;
+}
+
+function buildAspectsHTML(aspects, noteB) {
+  const rows = aspects.map(a => {
+    return `<div class="aspect-row">
+      <span class="aspect-type type-${a.type}">${ASPECT_LABELS[a.type]}</span>
+      <span class="aspect-desc">${a.planetA} — ${a.planetB}</span>
+    </div>`;
+  }).join('');
+
+  let noteHtml = '';
+  if (noteB) {
+    noteHtml = `<div class="aspect-row" style="margin-top:0.3rem;"><span style="color:var(--red);font-size:0.8rem;font-style:italic;">${noteB}</span></div>`;
+  }
+
+  return `<div class="aspects-section">
+    <div class="aspects-label">Aspects interplanétaires</div>
+    ${rows}
+    ${noteHtml}
+  </div>`;
+}
+
+function buildQuestionHTML(scenarioId, q) {
+  const textareaId = `q${scenarioId}-${q.key}`;
+  const modelId = `model-${scenarioId}-${q.key}`;
+  const revealId = `reveal-${scenarioId}-${q.key}`;
+
+  return `<div class="question-card">
+    <div class="question-header">
+      <div class="question-icon ${q.iconClass}">${q.icon}</div>
+      <div>
+        <div class="question-text">${q.text}</div>
+        <div class="question-sub">${q.sub}</div>
+      </div>
+    </div>
+    <textarea
+      id="${textareaId}"
+      placeholder="${q.placeholder}"
+      oninput="onInput()"
+    ></textarea>
+    <div class="btn-row">
+      <button class="btn btn-reveal" id="${revealId}" onclick="toggleReveal('${modelId}', '${revealId}')">
+        Voir la réponse modèle
+      </button>
+    </div>
+    <div class="model-answer" id="${modelId}">
+      <div class="answer-divider"></div>
+      <div class="answer-label"><span class="answer-dot"></span> Réponse modèle</div>
+      <div class="answer-text">${q.model}</div>
+    </div>
+  </div>`;
+}
+
+function buildScenarioHTML(sc) {
+  const noteB = sc.noteB || '';
+
+  return `<div class="scenario-card" id="scenario-${sc.id}">
+    <div class="scenario-title">Synastrie <span class="num">${sc.id}</span> / 2 — ${sc.title}</div>
+
+    <div class="planets-grid">
+      ${buildPlanetCol(sc.personA, 'label-a')}
+      <div class="vs-divider"><span class="vs-text">vs</span></div>
+      ${buildPlanetCol(sc.personB, 'label-b')}
+    </div>
+
+    ${buildAspectsHTML(sc.aspects, noteB)}
+
+    ${sc.questions.map(q => buildQuestionHTML(sc.id, q)).join('')}
+  </div>`;
+}
+
+function render() {
+  const container = document.getElementById('exercises');
+  const saved = loadSaved();
+
+  container.innerHTML = SCENARIOS.map(sc => buildScenarioHTML(sc)).join('');
+
+  SCENARIOS.forEach(sc => {
+    sc.questions.forEach(q => {
+      const taId = `q${sc.id}-${q.key}`;
+      const el = document.getElementById(taId);
+      if (el && saved.answers[taId]) el.value = saved.answers[taId];
+    });
+  });
+
+  if (saved.revealed) {
+    saved.revealed.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('visible');
+      const btnId = id.replace('model-', 'reveal-');
+      const btn = document.getElementById(btnId);
+      if (btn) { btn.textContent = 'Masquer la réponse modèle'; btn.classList.add('revealed'); }
+    });
+  }
+
+  updateProgress();
+}
+
+function onInput() {
+  autoSave();
+  updateProgress();
+}
+
+function toggleReveal(modelId, revealId) {
+  const el = document.getElementById(modelId);
+  const btn = document.getElementById(revealId);
+  const isVisible = el.classList.contains('visible');
+
+  if (isVisible) {
+    el.classList.remove('visible');
+    btn.textContent = 'Voir la réponse modèle';
+    btn.classList.remove('revealed');
+  } else {
+    el.classList.add('visible');
+    btn.textContent = 'Masquer la réponse modèle';
+    btn.classList.add('revealed');
+  }
+
+  autoSave();
+}
+
+function updateProgress() {
+  let count = 0;
+  SCENARIOS.forEach(sc => {
+    sc.questions.forEach(q => {
+      const val = document.getElementById(`q${sc.id}-${q.key}`)?.value?.trim();
+      if (val && val.length > 5) count++;
+    });
+  });
+  const pct = (count / TOTAL_FIELDS) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = count + ' / ' + TOTAL_FIELDS + ' champs remplis';
+}
+
+function getAnswers() {
+  const answers = {};
+  SCENARIOS.forEach(sc => {
+    sc.questions.forEach(q => {
+      const taId = `q${sc.id}-${q.key}`;
+      answers[taId] = document.getElementById(taId)?.value || '';
+    });
+  });
+  return answers;
+}
+
+function getRevealed() {
+  const revealed = [];
+  SCENARIOS.forEach(sc => {
+    sc.questions.forEach(q => {
+      const modelId = `model-${sc.id}-${q.key}`;
+      if (document.getElementById(modelId)?.classList.contains('visible')) {
+        revealed.push(modelId);
+      }
+    });
+  });
+  return revealed;
+}
+
+function autoSave() {
+  const data = { answers: getAnswers(), revealed: getRevealed() };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function saveAll() {
+  autoSave();
+  const ind = document.getElementById('saveIndicator');
+  ind.classList.add('show');
+  setTimeout(() => ind.classList.remove('show'), 2000);
+}
+
+function loadSaved() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return { answers: {}, revealed: [] };
+}
+
+function clearAll() {
+  if (!confirm('Effacer toutes vos réponses ?')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  render();
+}
+
+render();
+</script>
+</body>
+</html>

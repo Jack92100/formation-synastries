@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 9 - Construire une synthèse utile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0f0f0f;
+  --card: #1a1816;
+  --card-border: #2a2622;
+  --text: #e8e4df;
+  --muted: #6b6560;
+  --accent: #d4a574;
+  --pink: #e8b4b8;
+  --gold: #c9b896;
+  --blue: #7ba0b8;
+  --sage: #8aaa8a;
+  --red: #c87070;
+  --radius: 12px;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'IBM Plex Sans', sans-serif;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+header {
+  text-align: center;
+  padding: 3rem 1.5rem 2rem;
+  position: relative;
+}
+
+header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+
+.module-label {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+}
+
+header h1 {
+  font-family: 'Cormorant', serif;
+  font-size: clamp(1.5rem, 4.5vw, 2.3rem);
+  font-weight: 400;
+  color: var(--text);
+  line-height: 1.25;
+}
+
+header p {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-top: 0.75rem;
+  max-width: 620px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.progress-bar {
+  max-width: 780px;
+  margin: 2rem auto 0;
+  padding: 0 1.5rem;
+}
+
+.progress-track {
+  height: 3px;
+  background: var(--card-border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--gold));
+  border-radius: 2px;
+  transition: width 0.5s ease;
+  width: 0%;
+}
+
+.progress-text {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-top: 0.5rem;
+  text-align: right;
+}
+
+main {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.data-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  transition: border-color 0.3s;
+}
+
+.data-card:hover {
+  border-color: #3a3530;
+}
+
+.data-title {
+  font-family: 'Cormorant', serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.data-title .num {
+  color: var(--accent);
+}
+
+.data-subtitle {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+  font-style: italic;
+}
+
+.data-section {
+  margin-bottom: 1.25rem;
+}
+
+.data-section:last-child {
+  margin-bottom: 0;
+}
+
+.data-section-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 500;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+}
+
+.data-item {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.data-item:last-child { margin-bottom: 0; }
+
+.data-icon {
+  font-size: 0.9rem;
+  flex-shrink: 0;
+  width: 1.1rem;
+  text-align: center;
+}
+
+.data-icon.di-asc { color: var(--accent); }
+.data-icon.di-soleil { color: var(--gold); }
+.data-icon.di-lune { color: var(--blue); }
+.data-icon.di-mercure { color: var(--sage); }
+.data-icon.di-venus { color: var(--pink); }
+.data-icon.di-mars { color: var(--red); }
+.data-icon.di-jupiter { color: var(--gold); }
+.data-icon.di-saturne { color: var(--muted); }
+
+.data-text {
+  color: var(--text);
+}
+
+.data-text .highlight {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.data-text .muted-val {
+  color: var(--muted);
+}
+
+.synthesis-section {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.synthesis-label {
+  font-family: 'Cormorant', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+
+.synthesis-hint {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-bottom: 1rem;
+  font-style: italic;
+}
+
+.line-counter {
+  font-size: 0.72rem;
+  color: var(--muted);
+  text-align: right;
+  margin-top: 0.35rem;
+  margin-bottom: 0.75rem;
+}
+
+textarea {
+  width: 100%;
+  min-height: 220px;
+  background: var(--bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.95rem;
+  padding: 0.85rem 1rem;
+  resize: vertical;
+  transition: border-color 0.3s;
+  line-height: 1.7;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+textarea::placeholder {
+  color: var(--muted);
+  opacity: 0.5;
+}
+
+.btn-row {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.6rem 1.25rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s;
+  letter-spacing: 0.02em;
+}
+
+.btn-reveal {
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+}
+
+.btn-reveal:hover {
+  background: rgba(212, 165, 116, 0.1);
+}
+
+.btn-reveal.revealed {
+  border-color: var(--muted);
+  color: var(--muted);
+}
+
+.model-answer {
+  margin-top: 1rem;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.6s ease, opacity 0.4s ease;
+  opacity: 0;
+}
+
+.model-answer.visible {
+  max-height: 1200px;
+  opacity: 1;
+}
+
+.answer-divider {
+  height: 1px;
+  background: var(--card-border);
+  margin-bottom: 0.85rem;
+}
+
+.answer-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--gold);
+}
+
+.answer-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+
+.answer-text {
+  font-family: 'Cormorant', serif;
+  font-size: 1.02rem;
+  line-height: 1.8;
+  color: var(--text);
+  padding: 1rem 1.1rem;
+  background: rgba(201, 184, 150, 0.05);
+  border-radius: 8px;
+  border-left: 2px solid var(--gold);
+}
+
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+.btn-save {
+  background: var(--accent);
+  color: var(--bg);
+  font-weight: 600;
+}
+
+.btn-save:hover {
+  filter: brightness(1.1);
+}
+
+.btn-clear {
+  background: transparent;
+  border: 1px solid var(--card-border);
+  color: var(--muted);
+}
+
+.btn-clear:hover {
+  border-color: var(--muted);
+  color: var(--text);
+}
+
+.save-indicator {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--sage);
+  opacity: 0;
+  transition: opacity 0.3s;
+  margin-top: 0.5rem;
+}
+
+.save-indicator.show {
+  opacity: 1;
+}
+
+footer {
+  text-align: center;
+  padding: 2rem 1.5rem;
+  border-top: 1px solid var(--card-border);
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+footer p {
+  font-family: 'Cormorant', serif;
+  font-size: 0.9rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+@media (max-width: 560px) {
+  .data-card { padding: 1.25rem; }
+  .synthesis-section { padding: 1.25rem; }
+  textarea { min-height: 180px; font-size: 0.9rem; }
+  .btn { padding: 0.5rem 1rem; font-size: 0.75rem; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="module-label">Module 9</div>
+  <h1>Construire une synthèse utile</h1>
+  <p>Rédigez une synthèse courte en dix lignes à partir d'une analyse guidée.</p>
+</header>
+
+<div class="progress-bar">
+  <div class="progress-track">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+  <div class="progress-text" id="progressText">0 / 1 champ rempli</div>
+</div>
+
+<main id="exercises"></main>
+
+<div class="actions">
+  <button class="btn btn-save" onclick="saveAll()">Sauvegarder</button>
+  <button class="btn btn-clear" onclick="clearAll()">Effacer tout</button>
+</div>
+<div class="save-indicator" id="saveIndicator">Sauvegarde réussie</div>
+
+<footer>
+  <p>Module 9 - Atelier pratique de synastrie</p>
+</footer>
+
+<script>
+const STORAGE_KEY = 'synastrie-module9';
+const TOTAL_FIELDS = 1;
+
+const SCENARIO_DATA = {
+  title: 'Carine et Gilles',
+  subtitle: 'Relation de reconstruction',
+  sections: [
+    {
+      label: 'Personnalités',
+      items: [
+        { icon: '↑', iconClass: 'di-asc', text: '<span class="highlight">Carine</span> : Asc Gémeaux, <span class="muted-val">Soleil Vierge, Lune Taureau</span>' },
+        { icon: '↑', iconClass: 'di-asc', text: '<span class="highlight">Gilles</span> : Asc Balance, <span class="muted-val">Soleil Scorpion, Lune Cancer</span>' }
+      ]
+    },
+    {
+      label: 'Communication et intellect',
+      items: [
+        { icon: '☿', iconClass: 'di-mercure', text: 'Mercure <span class="highlight">trigone</span> — dialogue fluide et constructif' }
+      ]
+    },
+    {
+      label: 'Amour et tendresse',
+      items: [
+        { icon: '♀', iconClass: 'di-venus', text: 'Vénus <span class="highlight">carré</span> — langages amoureux décalés (Lion vs Scorpion)' }
+      ]
+    },
+    {
+      label: 'Désir et action',
+      items: [
+        { icon: '♂', iconClass: 'di-mars', text: 'Mars <span class="highlight">trigone</span> — dynamique constructive, initiative complémentaire' }
+      ]
+    },
+    {
+      label: 'Maisons activées',
+      items: [
+        { icon: '⌂', iconClass: 'di-asc', text: 'Maisons <span class="highlight">1/11</span> activées — Gilles réveille l\'identité de Carine et ses horizons' }
+      ]
+    },
+    {
+      label: 'Lentes',
+      items: [
+        { icon: '♃', iconClass: 'di-jupiter', text: 'Jupiter <span class="highlight">favorable</span> — soutien dans l\'ambition' },
+        { icon: '♄', iconClass: 'di-saturne', text: 'Saturne <span class="highlight">déséquilibré</span> — temporalités différentes' },
+        { icon: '—', iconClass: 'di-asc', text: '<span class="muted-val">Pas d\'Uranus/Neptune/Pluton majeur</span>' }
+      ]
+    }
+  ]
+};
+
+const MODEL_SYNTHESIS = `Carine et Gilles partagent un climat apaisé : leur dialogue est fluide (Ascendants Gémeaux/Balance) et leur émotionnel se reconnaît (Lune Taureau/Cancer). Gilles réveille chez Carine l'envie d'être elle-même (maison 1) et d'ouvrir de nouveaux horizons (maison 11). Le Mars trigone donne une dynamique constructive. Le Vénus carré signale un décalage dans les langages de l'amour : Carine a besoin d'être admirée (Lion), Gilles aime en profondeur et en silence (Scorpion). Le Saturne déséquilibré indique des temporalités différentes. Mais l'absence de lentes en tension forte rend cette relation plus stable que passionnelle. C'est une relation de reconstruction : elle apporte à Carine ce que Carl ne pouvait pas offrir (légèreté, respiration) et ce que Valentin a consumé (sécurité sans drame).`;
+
+function buildDataSectionHTML(section) {
+  const items = section.items.map(item => {
+    return `<div class="data-item">
+      <span class="data-icon ${item.iconClass}">${item.icon}</span>
+      <span class="data-text">${item.text}</span>
+    </div>`;
+  }).join('');
+
+  return `<div class="data-section">
+    <div class="data-section-label">${section.label}</div>
+    ${items}
+  </div>`;
+}
+
+function render() {
+  const container = document.getElementById('exercises');
+  const saved = loadSaved();
+
+  const sectionsHTML = SCENARIO_DATA.sections.map(s => buildDataSectionHTML(s)).join('');
+
+  container.innerHTML = `
+    <div class="data-card">
+      <div class="data-title">Données de la synastrie <span class="num">1</span> — ${SCENARIO_DATA.title}</div>
+      <div class="data-subtitle">${SCENARIO_DATA.subtitle}</div>
+      ${sectionsHTML}
+    </div>
+
+    <div class="synthesis-section">
+      <div class="synthesis-label">Votre synthèse</div>
+      <div class="synthesis-hint">Rédigez une synthèse courte en environ dix lignes, à partir des données ci-dessus.</div>
+      <textarea
+        id="synthesis"
+        placeholder="Commencez votre synthèse ici..."
+        oninput="onInput()"
+      ></textarea>
+      <div class="line-counter" id="lineCounter">0 ligne</div>
+      <div class="btn-row">
+        <button class="btn btn-reveal" id="revealModel" onclick="toggleReveal()">
+          Voir la synthèse modèle
+        </button>
+      </div>
+      <div class="model-answer" id="modelSynthesis">
+        <div class="answer-divider"></div>
+        <div class="answer-label"><span class="answer-dot"></span> Synthèse modèle</div>
+        <div class="answer-text">${MODEL_SYNTHESIS}</div>
+      </div>
+    </div>
+  `;
+
+  const ta = document.getElementById('synthesis');
+  if (ta && saved.synthesis) ta.value = saved.synthesis;
+
+  if (saved.revealed) {
+    const el = document.getElementById('modelSynthesis');
+    const btn = document.getElementById('revealModel');
+    if (el) el.classList.add('visible');
+    if (btn) { btn.textContent = 'Masquer la synthèse modèle'; btn.classList.add('revealed'); }
+  }
+
+  updateProgress();
+}
+
+function onInput() {
+  autoSave();
+  updateProgress();
+  updateLineCounter();
+}
+
+function updateLineCounter() {
+  const ta = document.getElementById('synthesis');
+  if (!ta) return;
+  const lines = ta.value.split('\n').filter(l => l.trim().length > 0).length;
+  const counter = document.getElementById('lineCounter');
+  counter.textContent = lines + ' ligne' + (lines !== 1 ? 's' : '');
+}
+
+function toggleReveal() {
+  const el = document.getElementById('modelSynthesis');
+  const btn = document.getElementById('revealModel');
+  const isVisible = el.classList.contains('visible');
+
+  if (isVisible) {
+    el.classList.remove('visible');
+    btn.textContent = 'Voir la synthèse modèle';
+    btn.classList.remove('revealed');
+  } else {
+    el.classList.add('visible');
+    btn.textContent = 'Masquer la synthèse modèle';
+    btn.classList.add('revealed');
+  }
+
+  autoSave();
+}
+
+function updateProgress() {
+  const val = document.getElementById('synthesis')?.value?.trim();
+  const count = (val && val.length > 20) ? 1 : 0;
+  const pct = (count / TOTAL_FIELDS) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = count + ' / ' + TOTAL_FIELDS + ' champ rempli';
+}
+
+function autoSave() {
+  const data = {
+    synthesis: document.getElementById('synthesis')?.value || '',
+    revealed: document.getElementById('modelSynthesis')?.classList.contains('visible') || false
+  };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function saveAll() {
+  autoSave();
+  const ind = document.getElementById('saveIndicator');
+  ind.classList.add('show');
+  setTimeout(() => ind.classList.remove('show'), 2000);
+}
+
+function loadSaved() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return { synthesis: '', revealed: false };
+}
+
+function clearAll() {
+  if (!confirm('Effacer votre synthèse ?')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  render();
+}
+
+render();
+</script>
+</body>
+</html>

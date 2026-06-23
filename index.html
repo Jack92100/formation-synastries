@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Formation Synastries - Exercices interactifs</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,600;1,400;1,600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --bg-primary: #0f0f0f; --bg-card: #1a1816; --text-primary: #e8e4df;
+            --text-secondary: #9a9590; --text-muted: #6b6560;
+            --accent-warm: #d4a574; --accent-pink: #e8b4b8; --accent-gold: #c9b896;
+            --accent-blue: #7ba0b8; --accent-sage: #8aaa8a; --accent-red: #c87070;
+            --border-subtle: rgba(212,165,116,0.15); --border-accent: rgba(212,165,116,0.4);
+            --font-display: "Cormorant", serif; --font-body: "IBM Plex Sans", sans-serif;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { min-height:100vh; background:var(--bg-primary); color:var(--text-primary); font-family:var(--font-body); font-weight:300; }
+        .glow { position:fixed; border-radius:50%; filter:blur(120px); opacity:0.08; pointer-events:none; }
+        .glow-1 { width:50vw; height:50vw; background:var(--accent-warm); top:-15%; right:-15%; }
+        .glow-2 { width:35vw; height:35vw; background:var(--accent-pink); bottom:-10%; left:-10%; }
+        .container { position:relative; z-index:1; max-width:900px; margin:0 auto; padding:clamp(2rem,5vw,4rem) clamp(1rem,3vw,2rem); }
+        header { text-align:center; margin-bottom:clamp(2rem,4vw,3rem); }
+        header h1 { font-family:var(--font-display); font-weight:600; font-size:clamp(2rem,5vw,3.5rem); line-height:1.1; }
+        header h1 .accent { color:var(--accent-warm); }
+        header h1 .italic { font-style:italic; font-weight:400; }
+        header p { margin-top:0.6em; font-size:clamp(0.85rem,1.4vw,1.05rem); color:var(--text-muted); }
+        .card { display:block; background:var(--bg-card); border:1px solid var(--border-subtle); border-radius:12px; padding:clamp(1rem,2vw,1.5rem) clamp(1.2rem,2.5vw,2rem); margin-bottom:clamp(0.8rem,1.5vw,1.2rem); text-decoration:none; color:var(--text-primary); transition:all 0.25s ease; cursor:pointer; }
+        .card:hover { border-color:var(--border-accent); background:rgba(212,165,116,0.04); transform:translateY(-2px); }
+        .card-num { font-family:var(--font-body); font-size:0.65rem; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; margin-bottom:0.3em; }
+        .card-title { font-family:var(--font-display); font-size:clamp(1.1rem,2vw,1.4rem); font-weight:600; margin-bottom:0.2em; }
+        .card-sub { font-size:clamp(0.75rem,1.1vw,0.88rem); color:var(--text-secondary); line-height:1.4; }
+        .card .arrow { float:right; font-size:1.2em; color:var(--accent-warm); opacity:0.5; transition:opacity 0.2s; }
+        .card:hover .arrow { opacity:1; }
+        .section-label { font-family:var(--font-body); font-size:0.7rem; font-weight:500; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-muted); margin:clamp(1.5rem,3vw,2.5rem) 0 clamp(0.8rem,1.5vw,1rem); }
+        .tools-section { display:grid; grid-template-columns:1fr 1fr; gap:clamp(0.8rem,1.5vw,1.2rem); margin-bottom:clamp(1.5rem,3vw,2rem); }
+        .tools-section .card { margin-bottom:0; }
+        @media(max-width:560px) { .tools-section { grid-template-columns:1fr; } }
+        .tag { display:inline-block; font-size:0.6rem; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; padding:0.2em 0.6em; border-radius:3px; border:1px solid; margin-left:0.5em; vertical-align:middle; }
+        .tag-optional { color:var(--accent-sage); border-color:var(--accent-sage); }
+    </style>
+</head>
+<body>
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+    <div class="container">
+        <header>
+            <h1>Atelier pratique<br/>de <span class="italic accent">synastrie</span></h1>
+            <p>Exercices interactifs - Formation Synastries</p>
+        </header>
+
+        <div class="section-label">Outils permanents</div>
+        <div class="tools-section">
+            <a class="card" href="outils.html">
+                <div class="card-num" style="color:var(--accent-warm);">Boîte à outils</div>
+                <div class="card-title">Présentation interactive <span class="arrow">&#8594;</span></div>
+                <div class="card-sub">4 outils + 4 formats d'exercice</div>
+            </a>
+            <a class="card" href="grille-profil-relationnel.html">
+                <div class="card-num" style="color:var(--accent-warm);">Module 3</div>
+                <div class="card-title">Grille profil relationnel <span class="arrow">&#8594;</span></div>
+                <div class="card-sub">Remplir le profil de chaque personne</div>
+            </a>
+        </div>
+
+        <div class="section-label">Exercices par module</div>
+        <a class="card" href="module-1.html">
+            <div class="card-num" style="color:var(--accent-warm);">Module 1</div>
+            <div class="card-title">Changer de regard <span class="arrow">&#8594;</span></div>
+            <div class="card-sub">Transformer des demandes vagues en questions exploitables</div>
+        </a>
+        <a class="card" href="module-2.html">
+            <div class="card-num" style="color:var(--accent-pink);">Module 2</div>
+            <div class="card-title">Poser le cadre <span class="arrow">&#8594;</span></div>
+            <div class="card-sub">Identifier la nature du lien, reformuler la question, noter le contexte</div>
+        </a>
+        <a class="card" href="module-4.html">
+            <div class="card-num" style="color:var(--accent-gold);">Module 4</div>
+            <div class="card-title">Lire le climat général <span class="arrow">&#8594;</span></div>
+            <div class="card-sub">Comparer deux profils et rédiger une phrase de climat</div>
+        </a>
+        <a class="card" href="module-5.html">
+            <div class="card-num" style="color:var(--accent-blue);">Module 5</div>
+            <div class="card-title">Observer les activations <span class="arrow">&#8594;</span></div>
+            <div class="card-sub">Repérer les maisons activées et formuler ce que ça réveille</div>
+        </a>
+        <a class="card" href="module-6.html">
+            <div class="card-num" style="color:var(--accent-pink);">Module 6</div>
+            <div class="card-title">Analyser le quotidien <span class="arrow">&#8594;</span></div>
+            <div class="card-sub">4 questions : communiquer, aimer, désirer, se confronter</div>
+        </a>
+        <a class="card" href="module-7.html">
+            <div class="card-num" style="color:var(--accent-red);">Module 7</div>
+            <div class="card-title">Durée et crises <span class="arrow">&#8594;</span></div>
+            <div class="card-sub">Identifier facteurs de durée, tension, instabilité, transformation</div>
+        </a>
+        <a class="card" href="module-8.html">
+            <div class="card-num" style="color:var(--accent-blue);">Module 8</div>
+            <div class="card-title">Parents / enfants <span class="arrow">&#8594;</span></div>
+            <div class="card-sub">Repérer projections parentales et loyautés invisibles</div>
+        </a>
+        <a class="card" href="module-9.html">
+            <div class="card-num" style="color:var(--accent-gold);">Module 9</div>
+            <div class="card-title">Construire une synthèse <span class="arrow">&#8594;</span></div>
+            <div class="card-sub">Rédiger une synthèse en dix lignes à partir de l'analyse</div>
+        </a>
+        <a class="card" href="module-11.html">
+            <div class="card-num" style="color:var(--accent-sage);">Module 11 <span class="tag tag-optional">optionnel</span></div>
+            <div class="card-title">Éthique et limites <span class="arrow">&#8594;</span></div>
+            <div class="card-sub">Reformuler des conclusions dangereuses en formulations utiles</div>
+        </a>
+    </div>
+</body>
+</html>

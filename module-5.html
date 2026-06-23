@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 5 - Observer ce que chacun active chez l'autre</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0f0f0f;
+  --card: #1a1816;
+  --card-border: #2a2622;
+  --text: #e8e4df;
+  --muted: #6b6560;
+  --accent: #d4a574;
+  --pink: #e8b4b8;
+  --gold: #c9b896;
+  --blue: #7ba0b8;
+  --sage: #8aaa8a;
+  --red: #c87070;
+  --radius: 12px;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'IBM Plex Sans', sans-serif;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+header {
+  text-align: center;
+  padding: 3rem 1.5rem 2rem;
+  position: relative;
+}
+
+header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+
+.module-label {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+}
+
+header h1 {
+  font-family: 'Cormorant', serif;
+  font-size: clamp(1.5rem, 4.5vw, 2.3rem);
+  font-weight: 400;
+  color: var(--text);
+  line-height: 1.25;
+}
+
+header p {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-top: 0.75rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.progress-bar {
+  max-width: 780px;
+  margin: 2rem auto 0;
+  padding: 0 1.5rem;
+}
+
+.progress-track {
+  height: 3px;
+  background: var(--card-border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--gold));
+  border-radius: 2px;
+  transition: width 0.5s ease;
+  width: 0%;
+}
+
+.progress-text {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-top: 0.5rem;
+  text-align: right;
+}
+
+main {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.exercise-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  transition: border-color 0.3s;
+}
+
+.exercise-card:hover {
+  border-color: #3a3530;
+}
+
+.card-number {
+  font-family: 'Cormorant', serif;
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.card-number .num {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.section-label {
+  font-family: 'Cormorant', serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.section-label .arrow {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.section-label.label-a { color: var(--pink); }
+.section-label.label-b { color: var(--blue); }
+
+.placements-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.placement-col {
+  background: rgba(15, 15, 15, 0.6);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 1.25rem;
+}
+
+.house-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.house-row:last-child {
+  margin-bottom: 0;
+}
+
+.house-badge {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.12rem 0.45rem;
+  border-radius: 4px;
+  flex-shrink: 0;
+  min-width: 28px;
+  text-align: center;
+}
+
+.house-badge.h1 { background: rgba(212, 165, 116, 0.15); color: var(--accent); }
+.house-badge.h4 { background: rgba(138, 170, 138, 0.15); color: var(--sage); }
+.house-badge.h5 { background: rgba(232, 180, 184, 0.15); color: var(--pink); }
+.house-badge.h7 { background: rgba(123, 160, 184, 0.15); color: var(--blue); }
+.house-badge.h8 { background: rgba(200, 112, 112, 0.15); color: var(--red); }
+.house-badge.h10 { background: rgba(201, 184, 150, 0.15); color: var(--gold); }
+.house-badge.h11 { background: rgba(123, 160, 184, 0.12); color: var(--blue); }
+
+.planet-name {
+  font-weight: 500;
+  color: var(--text);
+}
+
+.in-symbol {
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-style: italic;
+}
+
+.house-name {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.vs-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  grid-column: 1 / -1;
+  margin: -0.25rem 0;
+}
+
+.vs-text {
+  font-family: 'Cormorant', serif;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--muted);
+  opacity: 0.5;
+}
+
+.field-group {
+  margin-bottom: 1rem;
+}
+
+.field-group:last-of-type {
+  margin-bottom: 0;
+}
+
+label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+label .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot-maisons { background: var(--accent); }
+.dot-reveil { background: var(--pink); }
+
+textarea {
+  width: 100%;
+  min-height: 90px;
+  background: var(--bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.95rem;
+  padding: 0.85rem 1rem;
+  resize: vertical;
+  transition: border-color 0.3s;
+  line-height: 1.6;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+textarea::placeholder {
+  color: var(--muted);
+  opacity: 0.5;
+}
+
+textarea.short {
+  min-height: 60px;
+}
+
+.btn-row {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.btn {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.6rem 1.25rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s;
+  letter-spacing: 0.02em;
+}
+
+.btn-reveal {
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+}
+
+.btn-reveal:hover {
+  background: rgba(212, 165, 116, 0.1);
+}
+
+.btn-reveal.revealed {
+  border-color: var(--muted);
+  color: var(--muted);
+}
+
+.model-answer {
+  margin-top: 1.25rem;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.6s ease, opacity 0.4s ease;
+  opacity: 0;
+}
+
+.model-answer.visible {
+  max-height: 600px;
+  opacity: 1;
+}
+
+.answer-divider {
+  height: 1px;
+  background: var(--card-border);
+  margin-bottom: 1rem;
+}
+
+.answer-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--gold);
+}
+
+.answer-text {
+  font-family: 'Cormorant', serif;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--text);
+  padding: 0.85rem 1.1rem;
+  background: rgba(201, 184, 150, 0.05);
+  border-radius: 8px;
+  border-left: 2px solid var(--gold);
+}
+
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+.btn-save {
+  background: var(--accent);
+  color: var(--bg);
+  font-weight: 600;
+}
+
+.btn-save:hover {
+  filter: brightness(1.1);
+}
+
+.btn-clear {
+  background: transparent;
+  border: 1px solid var(--card-border);
+  color: var(--muted);
+}
+
+.btn-clear:hover {
+  border-color: var(--muted);
+  color: var(--text);
+}
+
+.save-indicator {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--sage);
+  opacity: 0;
+  transition: opacity 0.3s;
+  margin-top: 0.5rem;
+}
+
+.save-indicator.show {
+  opacity: 1;
+}
+
+footer {
+  text-align: center;
+  padding: 2rem 1.5rem;
+  border-top: 1px solid var(--card-border);
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+footer p {
+  font-family: 'Cormorant', serif;
+  font-size: 0.9rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+@media (max-width: 560px) {
+  .placements-grid {
+    grid-template-columns: 1fr;
+  }
+  .exercise-card { padding: 1.25rem; }
+  .placement-col { padding: 1rem; }
+  textarea { min-height: 70px; font-size: 0.9rem; }
+  textarea.short { min-height: 50px; }
+  .btn { padding: 0.5rem 1rem; font-size: 0.75rem; }
+  .vs-divider { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="module-label">Module 5</div>
+  <h1>Observer ce que chacun active chez l'autre</h1>
+  <p>Reperez les trois maisons les plus activées dans chaque synastrie et formulez ce que cela peut réveiller chez chaque personne.</p>
+</header>
+
+<div class="progress-bar">
+  <div class="progress-track">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+  <div class="progress-text" id="progressText">0 / 6 champs remplis</div>
+</div>
+
+<main id="exercises"></main>
+
+<div class="actions">
+  <button class="btn btn-save" onclick="saveAll()">Sauvegarder</button>
+  <button class="btn btn-clear" onclick="clearAll()">Effacer tout</button>
+</div>
+<div class="save-indicator" id="saveIndicator">Sauvegarde réussie</div>
+
+<footer>
+  <p>Module 5 - Atelier pratique de synastrie</p>
+</footer>
+
+<script>
+const HOUSE_NAMES = {
+  1: 'Identité / Corps',
+  2: 'Ressources',
+  3: 'Communication',
+  4: 'Foyer / Racines',
+  5: 'Plaisir / Création',
+  6: 'Quotidien',
+  7: 'Couple / Contrat',
+  8: 'Transformation / Intimité',
+  9: 'Horizon',
+  10: 'Réalisation / Statut',
+  11: 'Projet / Liberté',
+  12: 'Invisible'
+};
+
+const SCENARIOS = [
+  {
+    id: 1,
+    title: 'Carine et Carl',
+    placementsA: {
+      direction: 'Planètes de Carl dans maisons de Carine',
+      items: [
+        { planet: 'Soleil Carl', house: 4 },
+        { planet: 'Lune Carl', house: 7 },
+        { planet: 'Vénus Carl', house: 4 },
+        { planet: 'Mars Carl', house: 7 }
+      ]
+    },
+    placementsB: {
+      direction: 'Planètes de Carine dans maisons de Carl',
+      items: [
+        { planet: 'Soleil Carine', house: 10 },
+        { planet: 'Lune Carine', house: 10 },
+        { planet: 'Vénus Carine', house: 4 }
+      ]
+    },
+    model: 'Carine : maisons 4 et 7 fortement activées = Carl vient réveiller le foyer, la famille et le couple. C\'est une relation qui parle de fondation et de contrat. Maison 10 activée par Carine chez Carl = elle le pousse vers sa réalisation sociale. Pour Carl, Carine est un atout de statut.'
+  },
+  {
+    id: 2,
+    title: 'Carine et Valentin',
+    placementsA: {
+      direction: 'Planètes de Valentin dans maisons de Carine',
+      items: [
+        { planet: 'Soleil Valentin', house: 5 },
+        { planet: 'Mars Valentin', house: 8 },
+        { planet: 'Vénus Valentin', house: 5 },
+        { planet: 'Uranus Valentin', house: 1 }
+      ]
+    },
+    placementsB: {
+      direction: 'Planètes de Carine dans maisons de Valentin',
+      items: [
+        { planet: 'Soleil Carine', house: 8 },
+        { planet: 'Vénus Carine', house: 5 },
+        { planet: 'Mars Carine', house: 11 }
+      ]
+    },
+    model: 'Carine : maisons 5 et 8 activées = Valentin réveille la passion, le plaisir, la sexualité, mais aussi les zones de crise et de transformation. Maison 1 activée par Uranus = il la bouscule, la fait renaître. Pour Valentin : maison 8 activée par Carine = elle touche ses zones de vulnérabilité profonde. Maison 5 = jeu, séduction. Maison 11 = projet, liberté.'
+  },
+  {
+    id: 3,
+    title: 'Carine et Gilles',
+    placementsA: {
+      direction: 'Planètes de Gilles dans maisons de Carine',
+      items: [
+        { planet: 'Soleil Gilles', house: 1 },
+        { planet: 'Vénus Gilles', house: 11 },
+        { planet: 'Jupiter Gilles', house: 1 }
+      ]
+    },
+    placementsB: {
+      direction: 'Planètes de Carine dans maisons de Gilles',
+      items: [
+        { planet: 'Soleil Carine', house: 7 },
+        { planet: 'Lune Carine', house: 4 },
+        { planet: 'Mars Carine', house: 5 }
+      ]
+    },
+    model: 'Carine : maisons 1 et 11 activées = Gilles la fait se sentir elle-même, vivante, et ouvre de nouveaux horizons. Pas de maison 8 : moins de crise, plus de légèreté. Pour Gilles : maisons 7 et 4 activées = Carine parle de couple et de foyer. Maison 5 = tendresse et plaisir. Une relation qui sécurise et épanouit.'
+  }
+];
+
+const STORAGE_KEY = 'synastrie-module5';
+const TOTAL_FIELDS = SCENARIOS.length * 2;
+
+function buildPlacementsHTML(pl, cls, idx) {
+  const rows = pl.items.map(item => {
+    const hClass = 'h' + item.house;
+    return `<div class="house-row">
+      <span class="house-badge ${hClass}">M${item.house}</span>
+      <span class="planet-name">${item.planet}</span>
+      <span class="in-symbol">en</span>
+      <span class="house-name">Maison ${item.house} &mdash; ${HOUSE_NAMES[item.house]}</span>
+    </div>`;
+  }).join('');
+
+  return `<div class="placement-col">
+    <div class="section-label ${cls}">
+      ${pl.direction}
+    </div>
+    ${rows}
+  </div>`;
+}
+
+function buildScenarioHTML(sc, i) {
+  const clsA = i === 0 ? 'label-a' : 'label-b';
+  const clsB = i === 0 ? 'label-b' : 'label-a';
+
+  return `
+  <div class="exercise-card" id="card-${sc.id}">
+    <div class="card-number">Synastrie <span class="num">${i + 1}</span> / 3 &mdash; ${sc.title}</div>
+
+    <div class="placements-grid">
+      ${buildPlacementsHTML(sc.placementsA, 'label-a', i)}
+      ${buildPlacementsHTML(sc.placementsB, 'label-b', i)}
+    </div>
+
+    <div class="field-group">
+      <label for="maisons-${sc.id}"><span class="dot dot-maisons"></span> 3 maisons les plus activées</label>
+      <textarea
+        class="short"
+        id="maisons-${sc.id}"
+        placeholder="Quelles maisons sont les plus sollicitées ? Pour qui ? Ex : Carine, maisons 4 et 7..."
+        oninput="onInput()"
+      ></textarea>
+    </div>
+
+    <div class="field-group">
+      <label for="reveil-${sc.id}"><span class="dot dot-reveil"></span> Ce que ça peut réveiller chez chaque personne</label>
+      <textarea
+        id="reveil-${sc.id}"
+        placeholder="Formulez ce que ces activations révèlent ou réveillent pour chacun..."
+        oninput="onInput()"
+      ></textarea>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-reveal" id="reveal-${sc.id}" onclick="toggleReveal(${sc.id})">
+        Voir la réponse modèle
+      </button>
+    </div>
+
+    <div class="model-answer" id="model-${sc.id}">
+      <div class="answer-divider"></div>
+      <div class="answer-label"><span class="dot dot-maisons"></span> Réponse modèle</div>
+      <div class="answer-text">${sc.model}</div>
+    </div>
+  </div>`;
+}
+
+function render() {
+  const container = document.getElementById('exercises');
+  const saved = loadSaved();
+
+  container.innerHTML = SCENARIOS.map((sc, i) => buildScenarioHTML(sc, i)).join('');
+
+  SCENARIOS.forEach(sc => {
+    const mk = 'maisons-' + sc.id;
+    const rk = 'reveil-' + sc.id;
+    const mEl = document.getElementById(mk);
+    const rEl = document.getElementById(rk);
+    if (mEl && saved.answers[mk]) mEl.value = saved.answers[mk];
+    if (rEl && saved.answers[rk]) rEl.value = saved.answers[rk];
+  });
+
+  if (saved.revealed) {
+    saved.revealed.forEach(id => {
+      const el = document.getElementById('model-' + id);
+      const btn = document.getElementById('reveal-' + id);
+      if (el) el.classList.add('visible');
+      if (btn) { btn.textContent = 'Masquer la réponse modèle'; btn.classList.add('revealed'); }
+    });
+  }
+
+  updateProgress();
+}
+
+function onInput() {
+  autoSave();
+  updateProgress();
+}
+
+function toggleReveal(id) {
+  const el = document.getElementById('model-' + id);
+  const btn = document.getElementById('reveal-' + id);
+  const isVisible = el.classList.contains('visible');
+
+  if (isVisible) {
+    el.classList.remove('visible');
+    btn.textContent = 'Voir la réponse modèle';
+    btn.classList.remove('revealed');
+  } else {
+    el.classList.add('visible');
+    btn.textContent = 'Masquer la réponse modèle';
+    btn.classList.add('revealed');
+  }
+
+  autoSave();
+}
+
+function updateProgress() {
+  let count = 0;
+  SCENARIOS.forEach(sc => {
+    const mv = document.getElementById('maisons-' + sc.id)?.value?.trim();
+    const rv = document.getElementById('reveil-' + sc.id)?.value?.trim();
+    if (mv && mv.length > 3) count++;
+    if (rv && rv.length > 5) count++;
+  });
+  const pct = (count / TOTAL_FIELDS) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = count + ' / ' + TOTAL_FIELDS + ' champs remplis';
+}
+
+function getAnswers() {
+  const answers = {};
+  SCENARIOS.forEach(sc => {
+    answers['maisons-' + sc.id] = document.getElementById('maisons-' + sc.id)?.value || '';
+    answers['reveil-' + sc.id] = document.getElementById('reveil-' + sc.id)?.value || '';
+  });
+  return answers;
+}
+
+function getRevealed() {
+  const revealed = [];
+  SCENARIOS.forEach(sc => {
+    if (document.getElementById('model-' + sc.id)?.classList.contains('visible')) {
+      revealed.push(sc.id);
+    }
+  });
+  return revealed;
+}
+
+function autoSave() {
+  const data = { answers: getAnswers(), revealed: getRevealed() };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function saveAll() {
+  autoSave();
+  const ind = document.getElementById('saveIndicator');
+  ind.classList.add('show');
+  setTimeout(() => ind.classList.remove('show'), 2000);
+}
+
+function loadSaved() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return { answers: {}, revealed: [] };
+}
+
+function clearAll() {
+  if (!confirm('Effacer toutes vos réponses ?')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  render();
+}
+
+render();
+</script>
+</body>
+</html>

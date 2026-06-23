@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Atelier Synastrie - Boîte à outils élève</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,600;1,400;1,600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --bg-primary: #0f0f0f;
+            --bg-card: #1a1816;
+            --bg-card-hover: #221f1c;
+            --text-primary: #e8e4df;
+            --text-secondary: #9a9590;
+            --text-muted: #6b6560;
+            --accent-warm: #d4a574;
+            --accent-pink: #e8b4b8;
+            --accent-gold: #c9b896;
+            --accent-blue: #7ba0b8;
+            --accent-sage: #8aaa8a;
+            --accent-red: #c87070;
+            --border-subtle: rgba(212, 165, 116, 0.15);
+            --border-accent: rgba(212, 165, 116, 0.4);
+
+            --font-display: "Cormorant", serif;
+            --font-body: "IBM Plex Sans", sans-serif;
+
+            --title-size: clamp(2rem, 5.5vw, 4.5rem);
+            --h2-size: clamp(1.5rem, 3.5vw, 2.8rem);
+            --h3-size: clamp(1rem, 2.2vw, 1.5rem);
+            --body-size: clamp(0.8rem, 1.4vw, 1.05rem);
+            --small-size: clamp(0.65rem, 1vw, 0.85rem);
+            --label-size: clamp(0.6rem, 0.9vw, 0.75rem);
+
+            --slide-padding: clamp(1.5rem, 4vw, 4rem);
+            --content-gap: clamp(1rem, 2vw, 2rem);
+            --element-gap: clamp(0.5rem, 1vw, 1rem);
+
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --duration-normal: 0.6s;
+            --duration-slow: 1.2s;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html, body {
+            height: 100%;
+            overflow-x: hidden;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        html {
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            overflow: hidden;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .slide-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            max-height: 100%;
+            overflow: hidden;
+            padding: var(--slide-padding);
+        }
+
+        .card, .container, .content-box {
+            max-width: min(90vw, 1100px);
+            max-height: min(80vh, 700px);
+        }
+
+        .feature-list, .bullet-list { gap: clamp(0.4rem, 1vh, 1rem); }
+        .feature-list li, .bullet-list li { font-size: var(--body-size); line-height: 1.4; }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+            gap: clamp(0.5rem, 1.5vw, 1rem);
+        }
+
+        img, .image-container { max-width: 100%; max-height: min(50vh, 400px); object-fit: contain; }
+
+        @media (max-height: 700px) {
+            :root {
+                --slide-padding: clamp(0.75rem, 3vw, 2rem);
+                --content-gap: clamp(0.4rem, 1.5vw, 1rem);
+                --title-size: clamp(1.25rem, 4.5vw, 2.5rem);
+                --h2-size: clamp(1rem, 3vw, 1.75rem);
+            }
+        }
+        @media (max-height: 600px) {
+            :root {
+                --slide-padding: clamp(0.5rem, 2.5vw, 1.5rem);
+                --content-gap: clamp(0.3rem, 1vw, 0.75rem);
+                --title-size: clamp(1.1rem, 4vw, 2rem);
+                --body-size: clamp(0.7rem, 1.2vw, 0.95rem);
+            }
+            .nav-dots, .keyboard-hint, .decorative { display: none; }
+        }
+        @media (max-height: 500px) {
+            :root {
+                --slide-padding: clamp(0.4rem, 2vw, 1rem);
+                --title-size: clamp(1rem, 3.5vw, 1.5rem);
+                --h2-size: clamp(0.9rem, 2.5vw, 1.25rem);
+                --body-size: clamp(0.65rem, 1vw, 0.85rem);
+            }
+        }
+        @media (max-width: 600px) {
+            :root { --title-size: clamp(1.25rem, 7vw, 2.5rem); }
+            .grid { grid-template-columns: 1fr; }
+            .tool-layout { flex-direction: column !important; }
+            .mockup-panel { min-width: 0 !important; width: 100% !important; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.2s !important;
+            }
+            html { scroll-behavior: auto; }
+        }
+
+        .bg-glow {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.12;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .bg-glow-1 { width: 40vw; height: 40vw; background: var(--accent-warm); top: -10%; right: -10%; }
+        .bg-glow-2 { width: 30vw; height: 30vw; background: var(--accent-pink); bottom: -5%; left: -5%; }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(25px);
+            transition: opacity var(--duration-normal) var(--ease-out-expo),
+                        transform var(--duration-normal) var(--ease-out-expo);
+        }
+        .slide.visible .reveal { opacity: 1; transform: translateY(0); }
+        .reveal:nth-child(1) { transition-delay: 0.1s; }
+        .reveal:nth-child(2) { transition-delay: 0.2s; }
+        .reveal:nth-child(3) { transition-delay: 0.3s; }
+        .reveal:nth-child(4) { transition-delay: 0.35s; }
+        .reveal:nth-child(5) { transition-delay: 0.4s; }
+        .reveal:nth-child(6) { transition-delay: 0.45s; }
+        .reveal:nth-child(7) { transition-delay: 0.5s; }
+
+        .reveal-blur {
+            opacity: 0;
+            filter: blur(8px);
+            transition: opacity var(--duration-slow) var(--ease-out-expo),
+                        filter var(--duration-slow) var(--ease-out-expo);
+        }
+        .slide.visible .reveal-blur { opacity: 1; filter: blur(0); }
+
+        h1, h2, h3 { font-family: var(--font-display); font-weight: 600; color: var(--text-primary); }
+        h1 { font-size: var(--title-size); line-height: 1.1; letter-spacing: -0.02em; }
+        h2 { font-size: var(--h2-size); line-height: 1.15; }
+        h3 { font-size: var(--h3-size); line-height: 1.3; }
+        p, li, span { font-family: var(--font-body); font-weight: 300; }
+        p { font-size: var(--body-size); line-height: 1.6; color: var(--text-secondary); }
+
+        .accent-text { color: var(--accent-warm); }
+        .italic-display { font-family: var(--font-display); font-style: italic; font-weight: 400; }
+
+        .progress-bar {
+            position: fixed; top: 0; left: 0;
+            height: 2px; background: var(--accent-warm);
+            z-index: 1000; transition: width 0.3s ease;
+        }
+
+        .nav-dots {
+            position: fixed; right: clamp(0.75rem, 2vw, 1.5rem);
+            top: 50%; transform: translateY(-50%);
+            display: flex; flex-direction: column; gap: 6px;
+            z-index: 999;
+        }
+        .nav-dot {
+            width: 6px; height: 6px; border-radius: 50%;
+            background: var(--text-muted); opacity: 0.4;
+            cursor: pointer; transition: all 0.3s ease;
+            border: none; padding: 0;
+        }
+        .nav-dot.active { opacity: 1; background: var(--accent-warm); transform: scale(1.4); }
+        .nav-dot:hover { opacity: 0.7; }
+
+        .tool-layout {
+            display: flex; gap: clamp(1.5rem, 3vw, 3rem);
+            align-items: stretch; width: 100%;
+            max-width: min(95vw, 1300px); margin: 0 auto; flex: 1;
+        }
+
+        .tool-text {
+            flex: 1; display: flex; flex-direction: column;
+            justify-content: center; min-width: 0;
+        }
+
+        .tool-number {
+            font-family: var(--font-body); font-size: clamp(0.7rem, 1.2vw, 0.9rem);
+            font-weight: 400; letter-spacing: 0.15em; text-transform: uppercase;
+            margin-bottom: clamp(0.3rem, 0.5vw, 0.5rem);
+        }
+
+        .tool-tag {
+            display: inline-flex; align-items: center; gap: 0.4em;
+            font-family: var(--font-body); font-size: var(--label-size);
+            font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+            padding: 0.3em 0.8em; border-radius: 4px; border: 1px solid;
+            margin-bottom: clamp(0.5rem, 1vw, 1rem); width: fit-content;
+        }
+
+        .tool-why {
+            margin-top: clamp(0.5rem, 1vw, 1rem);
+            padding: clamp(0.6rem, 1.2vw, 1rem) clamp(0.8rem, 1.5vw, 1.2rem);
+            border-left: 2px solid; background: rgba(255,255,255,0.02);
+        }
+        .tool-why p { font-size: var(--small-size); line-height: 1.5; color: var(--text-secondary); }
+        .tool-why-label {
+            font-family: var(--font-body); font-size: var(--label-size);
+            font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+            margin-bottom: 0.3em;
+        }
+
+        .tool-when {
+            margin-top: clamp(0.3rem, 0.8vw, 0.6rem);
+            font-size: var(--small-size); color: var(--text-muted); font-style: italic;
+        }
+
+        .mockup-panel {
+            flex: 0 0 clamp(280px, 42vw, 520px);
+            min-width: clamp(240px, 35vw, 380px);
+            background: var(--bg-card); border: 1px solid var(--border-subtle);
+            border-radius: 12px; overflow: hidden;
+            display: flex; flex-direction: column; position: relative;
+        }
+
+        .mockup-header {
+            padding: clamp(0.5rem, 1vw, 0.8rem) clamp(0.8rem, 1.5vw, 1.2rem);
+            border-bottom: 1px solid var(--border-subtle);
+            display: flex; align-items: center; gap: 0.5em;
+        }
+        .mockup-dot { width: 8px; height: 8px; border-radius: 50%; }
+        .mockup-title-bar {
+            font-family: var(--font-body); font-size: var(--label-size);
+            font-weight: 500; color: var(--text-muted); margin-left: 0.5em;
+        }
+
+        .mockup-body {
+            flex: 1; padding: clamp(0.8rem, 1.5vw, 1.2rem);
+            display: flex; flex-direction: column; gap: clamp(0.4rem, 0.8vw, 0.6rem);
+            overflow: hidden;
+        }
+
+        .carnet-section {
+            display: flex; align-items: center; gap: 0.5em;
+            padding: clamp(0.3rem, 0.6vw, 0.5rem) 0;
+        }
+        .carnet-num {
+            width: clamp(20px, 2.5vw, 26px); height: clamp(20px, 2.5vw, 26px);
+            border-radius: 50%; display: flex; align-items: center;
+            justify-content: center; font-family: var(--font-body);
+            font-size: clamp(0.5rem, 0.8vw, 0.65rem); font-weight: 500; flex-shrink: 0;
+        }
+        .carnet-label { font-family: var(--font-body); font-size: var(--small-size); font-weight: 400; color: var(--text-secondary); }
+        .carnet-line { height: 1px; background: var(--border-subtle); margin: 0; }
+
+        .carte-wheel {
+            width: 100%; aspect-ratio: 1; max-height: min(38vh, 260px);
+            position: relative; margin: 0 auto;
+        }
+        .carte-outer-ring {
+            position: absolute; inset: 8%;
+            border: 1.5px dashed var(--text-muted); border-radius: 50%; opacity: 0.3;
+        }
+        .carte-inner-ring {
+            position: absolute; inset: 24%;
+            border: 1.5px solid var(--border-accent); border-radius: 50%; opacity: 0.4;
+        }
+        .carte-planet {
+            position: absolute; width: clamp(24px, 3.2vw, 34px); height: clamp(24px, 3.2vw, 34px);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-family: var(--font-body); font-size: clamp(0.5rem, 0.7vw, 0.6rem);
+            font-weight: 600; cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease; z-index: 2;
+        }
+        .carte-planet:hover { transform: scale(1.2); box-shadow: 0 0 14px currentColor; }
+        .carte-planet-a { border: 2px solid; background: rgba(0,0,0,0.3); }
+        .carte-planet-b { border: 2px solid; background: rgba(0,0,0,0.3); }
+        .carte-aspect-line {
+            position: absolute; height: 1.5px; transform-origin: 0 50%;
+            opacity: 0.35; z-index: 1;
+        }
+        .carte-click-hint {
+            font-family: var(--font-body); font-size: var(--label-size);
+            color: var(--accent-warm); text-align: center; padding-top: 0.3em; font-style: italic;
+        }
+        .carte-result {
+            margin-top: clamp(0.2rem, 0.4vw, 0.4rem);
+            padding: clamp(0.4rem, 0.8vw, 0.6rem) clamp(0.6rem, 1vw, 0.8rem);
+            background: rgba(212, 165, 116, 0.06);
+            border: 1px solid var(--border-accent); border-radius: 8px;
+            font-family: var(--font-body); font-size: var(--small-size);
+            color: var(--text-secondary); line-height: 1.5;
+        }
+        .carte-result-title {
+            font-weight: 600; color: var(--accent-warm); margin-bottom: 0.3em;
+            font-size: var(--label-size); letter-spacing: 0.05em;
+        }
+        .carte-result-btn {
+            display: inline-block; margin-top: 0.4em;
+            padding: 0.2em 0.6em; border: 1px solid var(--accent-warm);
+            border-radius: 4px; font-size: var(--label-size); color: var(--accent-warm);
+            cursor: pointer; transition: background 0.2s ease;
+        }
+        .carte-result-btn:hover { background: rgba(212,165,116,0.15); }
+        .carte-answer { display: none; margin-top: 0.4em; padding-top: 0.4em; border-top: 1px solid var(--border-subtle); }
+        .carte-answer.show { display: block; }
+
+        .route-step {
+            display: flex; align-items: flex-start; gap: 0.6em;
+            padding: clamp(0.2rem, 0.4vw, 0.3rem) 0;
+        }
+        .route-num {
+            width: clamp(22px, 2.8vw, 28px); height: clamp(22px, 2.8vw, 28px);
+            border-radius: 6px; display: flex; align-items: center; justify-content: center;
+            font-family: var(--font-body); font-size: clamp(0.55rem, 0.8vw, 0.65rem);
+            font-weight: 600; flex-shrink: 0; color: var(--bg-primary);
+        }
+        .route-label {
+            font-family: var(--font-body); font-size: var(--small-size);
+            font-weight: 300; color: var(--text-secondary); line-height: 1.4;
+        }
+        .route-arrow {
+            text-align: center; padding: clamp(0.05rem, 0.2vw, 0.1rem) 0;
+            color: var(--text-muted); font-size: clamp(0.6rem, 1vw, 0.75rem);
+        }
+
+        .trad-row {
+            display: flex; gap: clamp(0.4rem, 0.8vw, 0.6rem);
+            align-items: stretch; padding: clamp(0.25rem, 0.5vw, 0.4rem) 0;
+        }
+        .trad-brut {
+            flex: 1; padding: clamp(0.3rem, 0.6vw, 0.5rem) clamp(0.4rem, 0.8vw, 0.6rem);
+            background: rgba(200,112,112,0.06); border: 1px solid rgba(200,112,112,0.2);
+            border-radius: 6px; font-family: var(--font-body); font-size: var(--small-size);
+            color: var(--accent-red); line-height: 1.4;
+        }
+        .trad-arrow {
+            display: flex; align-items: center;
+            font-size: clamp(0.7rem, 1.1vw, 0.9rem); color: var(--accent-warm);
+        }
+        .trad-humain {
+            flex: 1.3; padding: clamp(0.3rem, 0.6vw, 0.5rem) clamp(0.4rem, 0.8vw, 0.6rem);
+            background: rgba(138,170,138,0.06); border: 1px solid rgba(138,170,138,0.2);
+            border-radius: 6px; font-family: var(--font-body); font-size: var(--small-size);
+            color: var(--accent-sage); line-height: 1.4;
+        }
+
+        .exo-card {
+            padding: clamp(0.6rem, 1vw, 0.8rem) clamp(0.8rem, 1.2vw, 1rem);
+            background: var(--bg-card); border: 1px solid var(--border-subtle);
+            border-radius: 10px; display: flex; flex-direction: column; gap: 0.3em;
+        }
+        .exo-icon { font-size: clamp(1rem, 1.5vw, 1.2rem); margin-bottom: 0.1em; }
+        .exo-title { font-family: var(--font-display); font-size: clamp(0.85rem, 1.3vw, 1.05rem); font-weight: 600; color: var(--text-primary); }
+        .exo-desc { font-family: var(--font-body); font-size: var(--small-size); color: var(--text-secondary); line-height: 1.4; }
+        .exo-learns { font-family: var(--font-body); font-size: var(--label-size); color: var(--accent-warm); font-style: italic; margin-top: 0.2em; }
+
+        .exo-grid {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: clamp(0.6rem, 1vw, 0.8rem);
+        }
+
+        .flow-step {
+            display: flex; align-items: center; gap: 0.8em;
+            padding: clamp(0.4rem, 0.8vw, 0.6rem) clamp(0.6rem, 1.2vw, 0.9rem);
+            background: var(--bg-card); border-radius: 8px;
+            border: 1px solid var(--border-subtle);
+        }
+        .flow-num {
+            font-family: var(--font-body); font-size: var(--label-size);
+            font-weight: 600; color: var(--accent-gold); min-width: 1.5em;
+        }
+        .flow-text { font-family: var(--font-body); font-size: var(--small-size); color: var(--text-secondary); }
+        .flow-text strong { color: var(--text-primary); font-weight: 500; }
+
+        .closing-cta {
+            margin-top: clamp(1rem, 2vw, 1.5rem);
+            padding: clamp(0.6rem, 1.2vw, 0.8rem) clamp(1.2rem, 2.5vw, 2rem);
+            border: 1px solid var(--accent-warm); border-radius: 8px;
+            display: inline-flex; align-items: center; gap: 0.5em;
+            font-family: var(--font-body); font-size: var(--body-size);
+            font-weight: 400; color: var(--accent-warm); cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease; width: fit-content;
+        }
+        .closing-cta:hover { background: var(--accent-warm); color: var(--bg-primary); }
+
+        .edit-hotzone {
+            position: fixed; top: 0; left: 0;
+            width: 80px; height: 80px; z-index: 10000; cursor: pointer;
+        }
+        .edit-toggle {
+            position: fixed; top: 12px; left: 12px;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+            z-index: 10001; background: var(--bg-card);
+            border: 1px solid var(--border-accent); color: var(--accent-warm);
+            padding: 6px 10px; border-radius: 6px;
+            font-family: var(--font-body); font-size: 12px; cursor: pointer;
+        }
+        .edit-toggle.show, .edit-toggle.active { opacity: 1; pointer-events: auto; }
+        .edit-banner {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            padding: 8px 16px;
+            background: rgba(212, 165, 116, 0.15);
+            border-top: 1px solid var(--border-accent);
+            font-family: var(--font-body); font-size: 12px; color: var(--accent-warm);
+            display: flex; align-items: center; justify-content: center; gap: 16px;
+            z-index: 10002; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+        }
+        .edit-banner.active { opacity: 1; pointer-events: auto; }
+        body.edit-active [contenteditable] { outline: 1px dashed var(--accent-warm); outline-offset: 2px; }
+        body.edit-active [contenteditable]:focus { outline: 2px solid var(--accent-warm); outline-offset: 2px; background: rgba(212, 165, 116, 0.05); }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+    <nav class="nav-dots" id="navDots"></nav>
+
+    <div class="edit-hotzone" id="editHotzone"></div>
+    <button class="edit-toggle" id="editToggle" title="Mode édition (E)">&#9998;</button>
+    <div class="edit-banner" id="editBanner">
+        <span>&#9998; Mode édition actif</span>
+        <span>Cliquez sur un texte pour le modifier</span>
+        <span>Ctrl+S pour enregistrer</span>
+    </div>
+
+    <!-- ===== SLIDE 1: TITRE ===== -->
+    <section class="slide" data-slide="0">
+        <div class="bg-glow bg-glow-1"></div>
+        <div class="bg-glow bg-glow-2"></div>
+        <div class="slide-content" style="text-align: center; align-items: center;">
+            <p class="reveal" style="font-family: var(--font-body); font-size: var(--label-size); letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent-warm); margin-bottom: 0.3em;">Atelier pratique de synastrie</p>
+            <h1 class="reveal" style="max-width: 800px;">La boîte à outils<br/><span class="italic-display accent-text">de l'élève</span></h1>
+            <p class="reveal" style="margin-top: 0.8em; max-width: 520px; color: var(--text-muted); font-size: var(--small-size);">4 outils permanents + 4 formats d'exercice<br/>pour apprendre à analyser une relation,<br/>pas à mémoriser un catalogue.</p>
+            <p class="reveal" style="margin-top: 1.5em; font-family: var(--font-body); font-size: var(--small-size); color: var(--text-muted); letter-spacing: 0.1em;">&#8595;</p>
+        </div>
+    </section>
+
+    <!-- ===== SLIDE 2: CARNET DE BORD ===== -->
+    <section class="slide" data-slide="1">
+        <div class="bg-glow" style="width:30vw;height:30vw;background:var(--accent-warm);top:10%;left:-10%;opacity:0.06;"></div>
+        <div class="slide-content">
+            <div class="tool-layout">
+                <div class="tool-text">
+                    <div class="reveal">
+                        <div class="tool-number" style="color: var(--accent-warm);">01 / Outil permanent</div>
+                        <h2>Le Carnet de Bord <span class="italic-display">de l'enquêteur</span></h2>
+                        <div class="tool-tag" style="color: var(--accent-warm); border-color: var(--accent-warm);">Grille pas à pas</div>
+                        <p>Un document que l'élève remplit à chaque analyse, de la première question à la synthèse finale. Il ne devine rien : il suit un chemin. Chaque case lui dit quoi chercher et dans quel ordre.</p>
+                        <div class="tool-why" style="border-left-color: var(--accent-warm);">
+                            <div class="tool-why-label" style="color: var(--accent-warm);">Pourquoi c'est nécessaire</div>
+                            <p>Les élèves savent interpréter un thème, mais devant une double roue, ils ne savent pas par où commencer, quoi regarder en priorité, quoi laisser de côté. Le carnet leur donne une méthode structurée, pas un verdict.</p>
+                        </div>
+                        <p class="tool-when">&#9200; L'élève l'utilise à chaque cas, du début à la fin de son analyse</p>
+                    </div>
+                </div>
+                <div class="mockup-panel reveal" style="border-color: rgba(212,165,116,0.25);">
+                    <div class="mockup-header">
+                        <div class="mockup-dot" style="background: var(--accent-warm);"></div>
+                        <div class="mockup-dot" style="background: var(--accent-pink);"></div>
+                        <div class="mockup-dot" style="background: var(--accent-gold);"></div>
+                        <span class="mockup-title-bar">carnet-de-bord.pdf</span>
+                    </div>
+                    <div class="mockup-body">
+                        <div class="carnet-section">
+                            <div class="carnet-num" style="background: var(--accent-warm); color: var(--bg-primary);">1</div>
+                            <div class="carnet-label">Le contexte et la question de départ</div>
+                        </div>
+                        <div class="carnet-line"></div>
+                        <div class="carnet-section">
+                            <div class="carnet-num" style="background: var(--accent-warm); color: var(--bg-primary);">2</div>
+                            <div class="carnet-label">Le profil relationnel de chaque personne</div>
+                        </div>
+                        <div class="carnet-line"></div>
+                        <div class="carnet-section">
+                            <div class="carnet-num" style="background: var(--accent-warm); color: var(--bg-primary);">3</div>
+                            <div class="carnet-label">La météo générale du lien</div>
+                        </div>
+                        <div class="carnet-line"></div>
+                        <div class="carnet-section">
+                            <div class="carnet-num" style="background: var(--accent-warm); color: var(--bg-primary);">4</div>
+                            <div class="carnet-label">Les maisons activées par l'autre</div>
+                        </div>
+                        <div class="carnet-line"></div>
+                        <div class="carnet-section">
+                            <div class="carnet-num" style="background: var(--accent-warm); color: var(--bg-primary);">5</div>
+                            <div class="carnet-label">Communication, affection, désir, conflit</div>
+                        </div>
+                        <div class="carnet-line"></div>
+                        <div class="carnet-section">
+                            <div class="carnet-num" style="background: var(--accent-warm); color: var(--bg-primary);">6</div>
+                            <div class="carnet-label">Forces, défis et synthèse finale</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SLIDE 3: CARTE INTERACTIVE ===== -->
+    <section class="slide" data-slide="2">
+        <div class="bg-glow" style="width:35vw;height:35vw;background:var(--accent-pink);bottom:5%;right:-10%;opacity:0.06;"></div>
+        <div class="slide-content">
+            <div class="tool-layout">
+                <div class="tool-text">
+                    <div class="reveal">
+                        <div class="tool-number" style="color: var(--accent-pink);">02 / Outil permanent</div>
+                        <h2>La Carte <span class="italic-display">Interactive</span></h2>
+                        <div class="tool-tag" style="color: var(--accent-pink); border-color: var(--accent-pink);">Double roue cliquable</div>
+                        <p>Une double roue avec des traits colorés entre les planètes qui ont un aspect. L'élève clique sur un trait. D'abord, 3 questions apparaissent pour le faire réfléchir. Ensuite, il clique sur "Voir l'analyse" et découvre la réponse de Jean-Yves.</p>
+                        <div class="tool-why" style="border-left-color: var(--accent-pink);">
+                            <div class="tool-why-label" style="color: var(--accent-pink);">Pourquoi c'est nécessaire</div>
+                            <p>Les élèves sont noyés devant la double roue : trop d'informations, pas de priorité. Cet outil ne donne pas la réponse : il oblige à chercher d'abord, puis à vérifier. C'est un entraîneur, pas un distributeur.</p>
+                        </div>
+                        <p class="tool-when">&#9200; Quand l'élève bloque sur une combinaison précise pendant un exercice ou une consultation</p>
+                    </div>
+                </div>
+                <div class="mockup-panel reveal" style="border-color: rgba(232,180,184,0.25);">
+                    <div class="mockup-header">
+                        <div class="mockup-dot" style="background: var(--accent-pink);"></div>
+                        <div class="mockup-dot" style="background: var(--accent-gold);"></div>
+                        <div class="mockup-dot" style="background: var(--accent-warm);"></div>
+                        <span class="mockup-title-bar">carte-synastrie.html</span>
+                    </div>
+                    <div class="mockup-body">
+                        <div class="carte-wheel" id="carteWheel">
+                            <div class="carte-outer-ring"></div>
+                            <div class="carte-inner-ring"></div>
+                            <div class="carte-planet carte-planet-a" style="border-color: var(--accent-warm); color: var(--accent-warm); top:6%; left:46%;" onclick="showCarteResult('asc')">Asc</div>
+                            <div class="carte-planet carte-planet-a" style="border-color: var(--accent-gold); color: var(--accent-gold); top:20%; left:72%;" onclick="showCarteResult('soleil')">&#9788;</div>
+                            <div class="carte-planet carte-planet-a" style="border-color: var(--accent-blue); color: var(--accent-blue); top:44%; left:82%;" onclick="showCarteResult('lune')">&#9790;</div>
+                            <div class="carte-planet carte-planet-a" style="border-color: var(--accent-warm); color: var(--accent-warm); top:68%; left:72%;" onclick="showCarteResult('mercure')">&#9791;</div>
+                            <div class="carte-planet carte-planet-a" style="border-color: var(--accent-pink); color: var(--accent-pink); top:82%; left:46%;" onclick="showCarteResult('venus')">&#9792;</div>
+                            <div class="carte-planet carte-planet-a" style="border-color: var(--accent-sage); color: var(--accent-sage); top:68%; left:20%;" onclick="showCarteResult('mars')">&#9794;</div>
+                            <div class="carte-planet carte-planet-b" style="border-color: var(--accent-gold); color: var(--accent-gold); top:44%; left:10%;" onclick="showCarteResult('jupiter')">&#9795;</div>
+                            <div class="carte-planet carte-planet-b" style="border-color: var(--text-muted); color: var(--text-muted); top:20%; left:20%;" onclick="showCarteResult('saturne')">&#9796;</div>
+                            <div class="carte-aspect-line" style="top:14%; left:48%; width:25%; transform:rotate(18deg); background: var(--accent-sage);"></div>
+                            <div class="carte-aspect-line" style="top:50%; left:46%; width:36%; transform:rotate(-2deg); background: var(--accent-pink);"></div>
+                            <div class="carte-aspect-line" style="top:76%; left:30%; width:28%; transform:rotate(30deg); background: var(--accent-red);"></div>
+                        </div>
+                        <p class="carte-click-hint">Cliquez sur une planète</p>
+                        <div class="carte-result" id="carteResult" style="display:none;">
+                            <div class="carte-result-title" id="carteResultTitle"></div>
+                            <div id="carteQuestions"></div>
+                            <div class="carte-result-btn" id="carteRevealBtn" onclick="revealCarteAnswer()">Voir l'analyse de Jean-Yves</div>
+                            <div class="carte-answer" id="carteAnswer"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SLIDE 4: FICHE DE ROUTE ===== -->
+    <section class="slide" data-slide="3">
+        <div class="bg-glow" style="width:30vw;height:30vw;background:var(--accent-gold);top:5%;left:50%;opacity:0.06;"></div>
+        <div class="slide-content">
+            <div class="tool-layout">
+                <div class="tool-text">
+                    <div class="reveal">
+                        <div class="tool-number" style="color: var(--accent-gold);">03 / Outil permanent</div>
+                        <h2>La Fiche <span class="italic-display">de Route</span></h2>
+                        <div class="tool-tag" style="color: var(--accent-gold); border-color: var(--accent-gold);">Infographie visuelle</div>
+                        <p>Un dessin simple d'une double roue avec des flèches numérotées : par où commencer, quoi regarder ensuite, quoi laisser de côté. L'élève la colle au mur ou la garde à côté de son écran quand il analyse une synastrie.</p>
+                        <div class="tool-why" style="border-left-color: var(--accent-gold);">
+                            <div class="tool-why-label" style="color: var(--accent-gold);">Pourquoi c'est nécessaire</div>
+                            <p>La première réaction d'un élève face à une double roue, c'est la panique. Trop d'informations, pas de priorité, tout semble important. La fiche de route dit simplement : commencez ici, puis allez là, et laissez ça pour plus tard.</p>
+                        </div>
+                        <p class="tool-when">&#9200; Au tout début de chaque analyse, avant de plonger dans les détails</p>
+                    </div>
+                </div>
+                <div class="mockup-panel reveal" style="border-color: rgba(201,184,150,0.25);">
+                    <div class="mockup-header">
+                        <div class="mockup-dot" style="background: var(--accent-gold);"></div>
+                        <div class="mockup-dot" style="background: var(--accent-warm);"></div>
+                        <div class="mockup-dot" style="background: var(--accent-sage);"></div>
+                        <span class="mockup-title-bar">fiche-route.pdf</span>
+                    </div>
+                    <div class="mockup-body" style="justify-content: center; gap: clamp(0.1rem, 0.3vw, 0.15rem);">
+                        <div class="route-step">
+                            <div class="route-num" style="background: var(--accent-gold);">1</div>
+                            <div class="route-label">Regardez les Ascendants<br/><span style="color:var(--text-muted); font-size:0.85em;">Le rythme de vie, le style d'entrée en relation</span></div>
+                        </div>
+                        <div class="route-arrow">&#8595;</div>
+                        <div class="route-step">
+                            <div class="route-num" style="background: var(--accent-gold);">2</div>
+                            <div class="route-label">Lisez les luminaires (Soleil / Lune)<br/><span style="color:var(--text-muted); font-size:0.85em;">La direction et la sécurité émotionnelle</span></div>
+                        </div>
+                        <div class="route-arrow">&#8595;</div>
+                        <div class="route-step">
+                            <div class="route-num" style="background: var(--accent-gold);">3</div>
+                            <div class="route-label">Observez Mercure, Vénus, Mars<br/><span style="color:var(--text-muted); font-size:0.85em;">La communication, l'amour, le conflit</span></div>
+                        </div>
+                        <div class="route-arrow">&#8595;</div>
+                        <div class="route-step">
+                            <div class="route-num" style="background: var(--accent-gold);">4</div>
+                            <div class="route-label">Jupiter et Saturne<br/><span style="color:var(--text-muted); font-size:0.85em;">Ce qui ouvre et ce qui pèse</span></div>
+                        </div>
+                        <div class="route-arrow">&#8595;</div>
+                        <div class="route-step">
+                            <div class="route-num" style="background: var(--accent-gold);">5</div>
+                            <div class="route-label">Les maisons activées<br/><span style="color:var(--text-muted); font-size:0.85em;">Où l'autre vient prendre de la place</span></div>
+                        </div>
+                        <div class="route-arrow">&#8595;</div>
+                        <div class="route-step">
+                            <div class="route-num" style="background: var(--accent-gold);">6</div>
+                            <div class="route-label">Synthèse<br/><span style="color:var(--text-muted); font-size:0.85em;">Formulez ce que vous avez compris</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SLIDE 5: TRADUCTEUR ===== -->
+    <section class="slide" data-slide="4">
+        <div class="bg-glow" style="width:30vw;height:30vw;background:var(--accent-blue);bottom:10%;right:20%;opacity:0.06;"></div>
+        <div class="slide-content">
+            <div class="tool-layout">
+                <div class="tool-text">
+                    <div class="reveal">
+                        <div class="tool-number" style="color: var(--accent-blue);">04 / Outil permanent</div>
+                        <h2>Le <span class="italic-display">Traducteur</span></h2>
+                        <div class="tool-tag" style="color: var(--accent-blue); border-color: var(--accent-blue);">Lexique de formulation</div>
+                        <p>Un guide qui transforme le jargon astrologique en mots que le client comprend. L'élève apprend à dire "vous ne parlez pas le même langage affectif" au lieu de "Vénus A carré Mars B". Chaque combinaison donne l'expression technique et sa traduction humaine.</p>
+                        <div class="tool-why" style="border-left-color: var(--accent-blue);">
+                            <div class="tool-why-label" style="color: var(--accent-blue);">Pourquoi c'est nécessaire</div>
+                            <p>Les élèves sortent de formation en sachant interpréter, mais pas formuler. Ils effraient le client au lieu de l'éclairer. Le traducteur leur donne les mots justes : constructifs, nuancés, sans verdict binaire.</p>
+                        </div>
+                        <p class="tool-when">&#9200; À la fin, quand il doit rédiger sa synthèse ou parler au client</p>
+                    </div>
+                </div>
+                <div class="mockup-panel reveal" style="border-color: rgba(123,160,184,0.25);">
+                    <div class="mockup-header">
+                        <div class="mockup-dot" style="background: var(--accent-blue);"></div>
+                        <div class="mockup-dot" style="background: var(--accent-sage);"></div>
+                        <div class="mockup-dot" style="background: var(--accent-warm);"></div>
+                        <span class="mockup-title-bar">traducteur.pdf</span>
+                    </div>
+                    <div class="mockup-body" style="justify-content: center; gap: clamp(0.6rem, 1.2vw, 1rem);">
+                        <div class="trad-row">
+                            <div class="trad-brut">"Saturne de A bloque la Lune de B. C'est mort."</div>
+                            <div class="trad-arrow">&#8594;</div>
+                            <div class="trad-humain">"Le besoin de structure de A vient sécuriser, mais parfois refroidir la sensibilité de B."</div>
+                        </div>
+                        <div class="trad-row">
+                            <div class="trad-brut">"Vénus A carré Mars B : frustration affective."</div>
+                            <div class="trad-arrow">&#8594;</div>
+                            <div class="trad-humain">"Vous ne donnez et ne recevez pas l'amour au même rythme. Ce n'est pas un manque d'amour, c'est un décalage."</div>
+                        </div>
+                        <div class="trad-row">
+                            <div class="trad-brut">"Uranus conjoint Vénus B : instabilité."</div>
+                            <div class="trad-arrow">&#8594;</div>
+                            <div class="trad-humain">"A apporte de l'imprévu dans la vie affective de B. Ça peut être passionnant ou déstabilisant."</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SLIDE 6: LE FIL ROUGE CARINE ===== -->
+    <section class="slide" data-slide="5">
+        <div class="bg-glow" style="width:35vw;height:35vw;background:var(--accent-warm);top:0;left:0;opacity:0.05;"></div>
+        <div class="slide-content" style="align-items: center;">
+            <div class="reveal" style="text-align: center; max-width: 750px; margin-bottom: clamp(0.5rem, 1.5vw, 1rem);">
+                <div class="tool-number" style="color: var(--accent-warm);">Le fil rouge</div>
+                <h2>L'enquête <span class="italic-display">Carine</span></h2>
+                <p style="margin-top: 0.3em;">Un même thème natal, trois relations, trois phases de vie.</p>
+            </div>
+            <div class="reveal" style="max-width: min(90vw, 850px); width: 100%; display: flex; flex-direction: column; gap: clamp(0.4rem, 0.8vw, 0.6rem);">
+                <div class="flow-step" style="border-left: 3px solid var(--accent-warm);">
+                    <div style="display:flex;flex-direction:column;gap:0.1em;">
+                        <span class="flow-text" style="font-size:var(--small-size);"><strong style="color:var(--accent-warm);">Carl</strong> (mari) &mdash; phase de construction</span>
+                        <span class="flow-text" style="font-size:var(--label-size);color:var(--text-muted);">Besoin dominant : s&eacute;curit&eacute;, injonction sociale, famille &bull; Maisons 4/7 : foyer, stabilit&eacute;</span>
+                    </div>
+                </div>
+                <div class="flow-step" style="border-left: 3px solid var(--accent-pink);">
+                    <div style="display:flex;flex-direction:column;gap:0.1em;">
+                        <span class="flow-text" style="font-size:var(--small-size);"><strong style="color:var(--accent-pink);">Valentin</strong> (amant) &mdash; phase de crise</span>
+                        <span class="flow-text" style="font-size:var(--label-size);color:var(--text-muted);">Besoin dominant : passion, besoin propre, fuir la monotonie &bull; Maisons 5/8 : passion, sexualit&eacute;, crise</span>
+                    </div>
+                </div>
+                <div class="flow-step" style="border-left: 3px solid var(--accent-sage);">
+                    <div style="display:flex;flex-direction:column;gap:0.1em;">
+                        <span class="flow-text" style="font-size:var(--small-size);"><strong style="color:var(--accent-sage);">Gilles</strong> (rencontre post-rupture) &mdash; phase de reconstruction</span>
+                        <span class="flow-text" style="font-size:var(--label-size);color:var(--text-muted);">Besoin dominant : retrouver une vie amoureuse stable &bull; Maisons 1/11 : renaissance, nouveaux projets</span>
+                    </div>
+                </div>
+                <div style="margin-top:clamp(0.3rem,0.6vw,0.5rem);padding:clamp(0.4rem,0.8vw,0.6rem) clamp(0.6rem,1vw,0.8rem);background:rgba(212,165,116,0.06);border:1px solid var(--border-accent);border-radius:8px;">
+                    <span class="flow-text" style="font-size:var(--small-size);color:var(--text-secondary);">Cas compl&eacute;mentaires : <strong style="color:var(--text-primary);">Jessica</strong> (2 conjoints + 2 enfants), <strong style="color:var(--text-primary);">Fred</strong> (2 conjointes + fille), <strong style="color:var(--text-primary);">Jeanne</strong> (2 conjoints + fille), <strong style="color:var(--text-primary);">Patrice</strong> (compagne + belle-fille)</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SLIDE 7: LES 4 EXERCICES ===== -->
+    <section class="slide" data-slide="5">
+        <div class="bg-glow" style="width:35vw;height:35vw;background:var(--accent-sage);top:5%;left:5%;opacity:0.05;"></div>
+        <div class="bg-glow" style="width:25vw;height:25vw;background:var(--accent-pink);bottom:5%;right:5%;opacity:0.05;"></div>
+        <div class="slide-content" style="align-items: center;">
+            <div class="reveal" style="text-align: center; max-width: 700px; margin-bottom: clamp(0.5rem, 1.5vw, 1.2rem);">
+                <div class="tool-number" style="color: var(--accent-sage);">4 formats d'exercice</div>
+                <h2>Comment faire <span class="italic-display">travailler</span> l'élève</h2>
+                <p style="margin-top: 0.3em;">Chaque format développe une compétence différente. Aucun ne marche sur l'autre.</p>
+            </div>
+            <div class="exo-grid reveal" style="max-width: min(90vw, 850px); width: 100%;">
+                <div class="exo-card" style="border-color: rgba(212,165,116,0.3);">
+                    <div class="exo-icon" style="color: var(--accent-warm);">&#128073;</div>
+                    <div class="exo-title">Le Cas en étapes dévoilées</div>
+                    <div class="exo-desc">On donne le cas morceau par morceau. L'élève pose son hypothèse à chaque étape, puis découvre la suite. Il suit le chemin complet d'une analyse réelle.</div>
+                    <div class="exo-learns">&#8594; Apprendre la méthode, de A à Z</div>
+                </div>
+                <div class="exo-card" style="border-color: rgba(232,180,184,0.3);">
+                    <div class="exo-icon" style="color: var(--accent-pink);">&#9997;</div>
+                    <div class="exo-title">"Que diriez-vous ?"</div>
+                    <div class="exo-desc">On donne un extrait de synastrie + la question du client. L'élève écrit sa formulation. Puis il compare avec celle de Jean-Yves. L'écart, c'est exactement ce qu'il doit apprendre.</div>
+                    <div class="exo-learns">&#8594; Apprendre à formuler sans faire peur</div>
+                </div>
+                <div class="exo-card" style="border-color: rgba(123,160,184,0.3);">
+                    <div class="exo-icon" style="color: var(--accent-blue);">&#128313;</div>
+                    <div class="exo-title">La Synastrie à l'aveugle</div>
+                    <div class="exo-desc">Double roue sans contexte. L'élève devine la nature du lien (amoureux, parental, professionnel) et la dynamique générale. Puis on révèle le vrai cas.</div>
+                    <div class="exo-learns">&#8594; Apprendre à se fier aux indices astrologiques</div>
+                </div>
+                <div class="exo-card" style="border-color: rgba(201,184,150,0.3);">
+                    <div class="exo-icon" style="color: var(--accent-gold);">&#128269;</div>
+                    <div class="exo-title">"Spot l'erreur"</div>
+                    <div class="exo-desc">On montre une interprétation avec 5 erreurs dedans (verdict binaire, confusion, conclusion hâtive, etc.). L'élève doit les trouver. On retient mieux les erreurs quand on les repère soi-même.</div>
+                    <div class="exo-learns">&#8594; Apprendre à éviter les pièges courants</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SLIDE 8: COMMENT TOUT S'ARTICULE ===== -->
+    <section class="slide" data-slide="6">
+        <div class="bg-glow" style="width:40vw;height:40vw;background:var(--accent-warm);top:20%;left:30%;opacity:0.04;"></div>
+        <div class="slide-content" style="align-items: center;">
+            <div class="reveal" style="text-align: center; max-width: 700px; margin-bottom: clamp(0.4rem, 1.2vw, 1rem);">
+                <h2>Comment tout <span class="italic-display">s'articule</span></h2>
+                <p>Exemple sur le module "Mercure, Vénus, Mars"</p>
+            </div>
+            <div class="reveal" style="max-width: min(90vw, 820px); width: 100%; display: flex; flex-direction: column; gap: clamp(0.25rem, 0.6vw, 0.4rem);">
+                <div class="flow-step">
+                    <span class="flow-num">1</span>
+                    <span class="flow-text"><strong>La Fiche de Route</strong> rappelle : "maintenant, regardez les interaspects entre Mercure, Vénus et Mars"</span>
+                </div>
+                <div class="flow-step">
+                    <span class="flow-num">2</span>
+                    <span class="flow-text">Jean-Yves montre son observation sur le cas Carine <strong>(vidéo)</strong></span>
+                </div>
+                <div class="flow-step">
+                    <span class="flow-num">3</span>
+                    <span class="flow-text"><strong>Cas en étapes dévoilées</strong> : l'élève applique la même méthode sur un autre cas</span>
+                </div>
+                <div class="flow-step">
+                    <span class="flow-num">4</span>
+                    <span class="flow-text">S'il bloque sur "Mars A carré Vénus B", il ouvre la <strong>Carte Interactive</strong> : 3 questions pour réfléchir, puis la réponse de Jean-Yves</span>
+                </div>
+                <div class="flow-step">
+                    <span class="flow-num">5</span>
+                    <span class="flow-text"><strong>"Que diriez-vous ?"</strong> : l'élève écrit sa formulation pour le client</span>
+                </div>
+                <div class="flow-step">
+                    <span class="flow-num">6</span>
+                    <span class="flow-text">Il vérifie avec le <strong>Traducteur</strong> et la réponse de Jean-Yves, et remplit son <strong>Carnet de Bord</strong></span>
+                </div>
+                <div class="flow-step">
+                    <span class="flow-num">7</span>
+                    <span class="flow-text"><strong>"Spot l'erreur"</strong> : on lui montre une interprétation ratée du même cas, il repère les erreurs</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SLIDE 9: PROCHAINE ÉTAPE ===== -->
+    <section class="slide" data-slide="7">
+        <div class="bg-glow bg-glow-1"></div>
+        <div class="bg-glow bg-glow-2"></div>
+        <div class="slide-content" style="text-align: center; align-items: center;">
+            <div class="reveal" style="max-width: 600px;">
+                <h2>Prochaine <span class="italic-display">étape</span></h2>
+                <p style="margin-top: 0.8em;">Si ce concept vous parle, voici comment on avance :</p>
+                <div style="margin-top: clamp(1rem, 2vw, 1.5rem); display: flex; flex-direction: column; gap: clamp(0.5rem, 1vw, 0.8rem); text-align: left;">
+                    <div style="display: flex; align-items: flex-start; gap: 0.8em;">
+                        <span style="font-family: var(--font-body); font-size: var(--label-size); font-weight: 600; color: var(--accent-warm); min-width: 1.5em;">1.</span>
+                        <span style="font-family: var(--font-body); font-size: var(--small-size); color: var(--text-secondary);">Vous validez le concept et les outils</span>
+                    </div>
+                    <div style="display: flex; align-items: flex-start; gap: 0.8em;">
+                        <span style="font-family: var(--font-body); font-size: var(--label-size); font-weight: 600; color: var(--accent-warm); min-width: 1.5em;">2.</span>
+                        <span style="font-family: var(--font-body); font-size: var(--small-size); color: var(--text-secondary);">Jean-Yves remplit un Google Sheet avec le contenu (dynamiques, citations, formulations)</span>
+                    </div>
+                    <div style="display: flex; align-items: flex-start; gap: 0.8em;">
+                        <span style="font-family: var(--font-body); font-size: var(--label-size); font-weight: 600; color: var(--accent-warm); min-width: 1.5em;">3.</span>
+                        <span style="font-family: var(--font-body); font-size: var(--small-size); color: var(--text-secondary);">On construit les outils et les exercices</span>
+                    </div>
+                    <div style="display: flex; align-items: flex-start; gap: 0.8em;">
+                        <span style="font-family: var(--font-body); font-size: var(--label-size); font-weight: 600; color: var(--accent-warm); min-width: 1.5em;">4.</span>
+                        <span style="font-family: var(--font-body); font-size: var(--small-size); color: var(--text-secondary);">On intègre dans Schoolmaker et on tourne les vidéos complémentaires</span>
+                    </div>
+                </div>
+                <div class="closing-cta" style="margin-top: clamp(1rem, 2vw, 1.5rem);">Discutons-en &#8594;</div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        class SlidePresentation {
+            constructor() {
+                this.slides = document.querySelectorAll('.slide');
+                this.currentSlide = 0;
+                this.setupIntersectionObserver();
+                this.setupKeyboardNav();
+                this.setupTouchNav();
+                this.setupProgressBar();
+                this.setupNavDots();
+            }
+
+            setupIntersectionObserver() {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            this.currentSlide = parseInt(entry.target.dataset.slide);
+                            this.updateNavDots();
+                            this.updateProgressBar();
+                        }
+                    });
+                }, { threshold: 0.5 });
+                this.slides.forEach(slide => observer.observe(slide));
+            }
+
+            setupKeyboardNav() {
+                document.addEventListener('keydown', (e) => {
+                    if (e.target.getAttribute('contenteditable') === 'true') return;
+                    if (e.key === 'ArrowDown' || e.key === ' ' || e.key === 'PageDown') {
+                        e.preventDefault();
+                        this.goToSlide(this.currentSlide + 1);
+                    } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+                        e.preventDefault();
+                        this.goToSlide(this.currentSlide - 1);
+                    }
+                });
+            }
+
+            setupTouchNav() {
+                let startY = 0;
+                document.addEventListener('touchstart', (e) => { startY = e.touches[0].clientY; });
+                document.addEventListener('touchend', (e) => {
+                    const diff = startY - e.changedTouches[0].clientY;
+                    if (Math.abs(diff) > 50) {
+                        this.goToSlide(this.currentSlide + (diff > 0 ? 1 : -1));
+                    }
+                });
+            }
+
+            setupProgressBar() {
+                this.progressBar = document.getElementById('progressBar');
+            }
+
+            updateProgressBar() {
+                if (this.progressBar) {
+                    const pct = ((this.currentSlide + 1) / this.slides.length) * 100;
+                    this.progressBar.style.width = pct + '%';
+                }
+            }
+
+            setupNavDots() {
+                this.navDotsContainer = document.getElementById('navDots');
+                this.navDotsContainer.innerHTML = '';
+                this.slides.forEach((_, i) => {
+                    const dot = document.createElement('button');
+                    dot.className = 'nav-dot';
+                    dot.addEventListener('click', () => this.goToSlide(i));
+                    this.navDotsContainer.appendChild(dot);
+                });
+                this.navDots = this.navDotsContainer.querySelectorAll('.nav-dot');
+                this.updateNavDots();
+            }
+
+            updateNavDots() {
+                this.navDots?.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === this.currentSlide);
+                });
+            }
+
+            goToSlide(n) {
+                const clamped = Math.max(0, Math.min(this.slides.length - 1, n));
+                this.slides[clamped]?.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        const carteData = {
+            asc: {
+                title: "Ascendant / Ascendant",
+                questions: [
+                    "Qu'est-ce que l'Ascendant dit du premier contact entre deux personnes ?",
+                    "Les deux personnes entrent-elles dans la vie au même rythme ?",
+                    "Y a-t-il facilité naturelle ou frottement dans la manière d'aborder le monde ?"
+                ],
+                answer: "Quand les Ascendants sont en harmonie, les deux personnes se reconnaissent instinctivement. Leur rythme de vie est compatible. Quand ils sont en tension, l'un peut trouver l'autre trop brusque ou trop lent. Ce n'est pas grave, mais ça demande un ajustement."
+            },
+            soleil: {
+                title: "Soleil / Soleil",
+                questions: [
+                    "Les deux personnes vont-elles dans la même direction ?",
+                    "Y a-t-il soutien mutuel ou rivalité dans l'expression personnelle ?",
+                    "L'identité de l'une nourrit-elle ou contrarie celle de l'autre ?"
+                ],
+                answer: "Le Soleil montre la direction de vie. Deux Soleils compatibles, c'est deux personnes qui s'encouragent mutuellement. Deux Soleils en tension, c'est souvent une rivalité silencieuse ou un décalage profond dans les ambitions."
+            },
+            lune: {
+                title: "Lune / Lune",
+                questions: [
+                    "Leurs besoins émotionnels sont-ils compatibles ?",
+                    "Se sentent-ils en sécurité l'un avec l'autre ?",
+                    "Comment réagissent-ils instinctivement sous stress ?"
+                ],
+                answer: "La Lune, c'est le quotidien intime. Deux Lunes harmonieuses, c'est la maison commune où on se sent bien. Deux Lunes en tension, c'est le décalage affectif : l'un a besoin de parler, l'autre de silence."
+            },
+            mercure: {
+                title: "Mercure / Mercure",
+                questions: [
+                    "Se parlent-ils facilement ou se malentendent-ils ?",
+                    "L'un va-t-il trop vite pour l'autre intellectuellement ?",
+                    "Sont-ils capables de parler calmement de leurs émotions ?"
+                ],
+                answer: "Mercure dit comment la parole circule. Un bon aspect Mercure, c'est des heures de conversation sans fatigue. Un aspect tendu, c'est des malentendus répétés : l'un se sent ignoré, l'autre se sent noyé."
+            },
+            venus: {
+                title: "Vénus / Vénus",
+                questions: [
+                    "S'aiment-ils de la même manière ?",
+                    "L'un donne-t-il plus que l'autre affectivement ?",
+                    "Leurs langages amoureux sont-ils compatibles ?"
+                ],
+                answer: "Vénus dit comment on aime et comment on veut être aimé. Deux Vénus en harmonie, c'est la tendresse naturelle. En tension, c'est la frustration : l'un a besoin de mots doux, l'autre montre son amour par les actes."
+            },
+            mars: {
+                title: "Mars / Mars",
+                questions: [
+                    "Leur désir est-il sur le même rythme ?",
+                    "Comment se confrontent-ils quand ça va mal ?",
+                    "L'action de l'un stimule-t-elle ou agace-t-elle l'autre ?"
+                ],
+                answer: "Mars, c'est le moteur et le conflit. En harmonie, c'est l'émulation, le désir fluide, la capacité à se stimuler. En tension, c'est l'impatience, la rivalité, ou le conflit qui monte vite et qui blesse."
+            },
+            jupiter: {
+                title: "Jupiter / Jupiter",
+                questions: [
+                    "Qu'est-ce qui ouvre ou amplifie cette relation ?",
+                    "Y a-t-il soutien mutuel ou excès d'attentes ?",
+                    "La relation grandit-elle grâce à Jupiter ?"
+                ],
+                answer: "Jupiter apporte l'expansion. Un bon Jupiter, c'est la confiance, l'enthousiasme, le soutien mutuel. Un Jupiter tendu, c'est l'idéalisation excessive ou la promesse non tenue."
+            },
+            saturne: {
+                title: "Saturne / Saturne",
+                questions: [
+                    "Qu'est-ce qui structure ou pèse dans la relation ?",
+                    "Saturne est-il un ciment ou une prison ?",
+                    "Y a-t-il engagement et durée, ou blocage et froideur ?"
+                ],
+                answer: "Saturne peut être le ciment ou la prison. En harmonie, c'est l'engagement durable, la loyauté, la construction solide. En tension, c'est la froideur, le blocage, ou la relation vécue comme une obligation."
+            }
+        };
+
+        let currentCarteKey = null;
+
+        function showCarteResult(key) {
+            const el = document.getElementById('carteResult');
+            const qEl = document.getElementById('carteQuestions');
+            const titleEl = document.getElementById('carteResultTitle');
+            const answerEl = document.getElementById('carteAnswer');
+            const btn = document.getElementById('carteRevealBtn');
+            const data = carteData[key];
+            if (!data) return;
+            currentCarteKey = key;
+            el.style.display = 'block';
+            titleEl.textContent = data.title;
+            qEl.innerHTML = data.questions.map(q => `<div style="padding:0.15em 0;">&#8226; ${q}</div>`).join('');
+            answerEl.innerHTML = '';
+            answerEl.classList.remove('show');
+            btn.style.display = 'inline-block';
+        }
+
+        function revealCarteAnswer() {
+            if (!currentCarteKey) return;
+            const data = carteData[currentCarteKey];
+            const answerEl = document.getElementById('carteAnswer');
+            const btn = document.getElementById('carteRevealBtn');
+            answerEl.innerHTML = `<div style="color:var(--accent-gold);font-weight:500;font-size:var(--label-size);margin-bottom:0.2em;">L'analyse de Jean-Yves :</div>${data.answer}`;
+            answerEl.classList.add('show');
+            btn.style.display = 'none';
+        }
+
+        class InlineEditor {
+            constructor() {
+                this.isActive = false;
+                this.editableElements = [];
+                this.toggleBtn = document.getElementById('editToggle');
+                this.banner = document.getElementById('editBanner');
+                this.hotzone = document.getElementById('editHotzone');
+                this.setup();
+            }
+
+            setup() {
+                this.toggleBtn.addEventListener('click', () => this.toggleEditMode());
+                this.hotzone.addEventListener('click', () => this.toggleEditMode());
+
+                let hideTimeout = null;
+                this.hotzone.addEventListener('mouseenter', () => {
+                    clearTimeout(hideTimeout);
+                    this.toggleBtn.classList.add('show');
+                });
+                this.hotzone.addEventListener('mouseleave', () => {
+                    hideTimeout = setTimeout(() => {
+                        if (!this.isActive) this.toggleBtn.classList.remove('show');
+                    }, 400);
+                });
+                this.toggleBtn.addEventListener('mouseenter', () => clearTimeout(hideTimeout));
+                this.toggleBtn.addEventListener('mouseleave', () => {
+                    hideTimeout = setTimeout(() => {
+                        if (!this.isActive) this.toggleBtn.classList.remove('show');
+                    }, 400);
+                });
+
+                document.addEventListener('keydown', (e) => {
+                    if ((e.key === 'e' || e.key === 'E') && !e.target.getAttribute('contenteditable')) {
+                        this.toggleEditMode();
+                    }
+                    if (e.ctrlKey && e.key === 's') {
+                        e.preventDefault();
+                        this.exportFile();
+                    }
+                });
+            }
+
+            toggleEditMode() {
+                this.isActive = !this.isActive;
+                document.body.classList.toggle('edit-active', this.isActive);
+                this.toggleBtn.classList.toggle('active', this.isActive);
+                this.banner.classList.toggle('active', this.isActive);
+
+                const textEls = document.querySelectorAll('h1, h2, h3, p, span, li, .carnet-label, .route-label, .exo-title, .exo-desc, .exo-learns, .trad-brut, .trad-humain, .flow-text, .tool-when, .tool-why-label');
+                textEls.forEach(el => {
+                    if (this.isActive) {
+                        el.setAttribute('contenteditable', 'true');
+                        this.editableElements.push(el);
+                    } else {
+                        el.removeAttribute('contenteditable');
+                    }
+                });
+
+                if (!this.isActive) {
+                    this.editableElements = [];
+                    this.toggleBtn.classList.remove('show');
+                }
+            }
+
+            exportFile() {
+                const editableEls = Array.from(document.querySelectorAll('[contenteditable]'));
+                editableEls.forEach(el => el.removeAttribute('contenteditable'));
+                document.body.classList.remove('edit-active');
+                const editToggle = document.getElementById('editToggle');
+                const editBanner = document.querySelector('.edit-banner');
+                editToggle?.classList.remove('active', 'show');
+                editBanner?.classList.remove('active');
+
+                const html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+
+                document.body.classList.add('edit-active');
+                editableEls.forEach(el => el.setAttribute('contenteditable', 'true'));
+                editToggle?.classList.add('active');
+                editBanner?.classList.add('active');
+
+                const blob = new Blob([html], { type: 'text/html' });
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = 'atelier-synastrie-outils.html';
+                a.click();
+                URL.revokeObjectURL(a.href);
+            }
+        }
+
+        new SlidePresentation();
+        new InlineEditor();
+    </script>
+</body>
+</html>
