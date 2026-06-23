@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 1 embed - Transformer les demandes vagues</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0f0f0f;
+  --card: #1a1816;
+  --card-border: #2a2622;
+  --text: #e8e4df;
+  --muted: #7c756f;
+  --accent: #d4a574;
+  --pink: #e8b4b8;
+  --gold: #c9b896;
+  --success: #7a9e7e;
+}
+html, body { min-height: 100%; background: var(--bg); }
+body {
+  color: var(--text);
+  font-family: 'IBM Plex Sans', sans-serif;
+  line-height: 1.55;
+  overflow-x: hidden;
+}
+.wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: clamp(1rem, 2vw, 1.5rem);
+}
+header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 1rem;
+  padding: 0 0 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--card-border);
+}
+.module-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.25rem;
+}
+h1 {
+  font-family: 'Cormorant', serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 500;
+  line-height: 1.05;
+}
+header p {
+  color: var(--muted);
+  font-size: clamp(0.85rem, 1.4vw, 1rem);
+  margin-top: 0.4rem;
+  max-width: 760px;
+}
+.top-actions { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; }
+.small-btn {
+  border: 1px solid rgba(212,165,116,0.45);
+  background: rgba(212,165,116,0.06);
+  color: var(--accent);
+  border-radius: 8px;
+  padding: 0.55rem 0.8rem;
+  font: inherit;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+.progress-bar { margin-bottom: 1.2rem; }
+.progress-track { height: 4px; background: var(--card-border); border-radius: 99px; overflow: hidden; }
+.progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--gold)); transition: width 0.3s; }
+.progress-text { color: var(--muted); text-align: right; margin-top: 0.35rem; font-size: 0.78rem; }
+main {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+  gap: 1rem;
+}
+.exercise-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: clamp(1rem, 2vw, 1.35rem);
+}
+.card-number {
+  color: var(--muted);
+  font-size: 0.82rem;
+  margin-bottom: 0.75rem;
+}
+.card-number .num { color: var(--accent); font-weight: 600; }
+.vague-question {
+  font-family: 'Cormorant', serif;
+  color: var(--pink);
+  font-style: italic;
+  font-size: clamp(1.25rem, 2.2vw, 1.65rem);
+  line-height: 1.25;
+  border-left: 2px solid var(--accent);
+  padding-left: 0.85rem;
+  margin-bottom: 1rem;
+}
+label {
+  display: block;
+  color: var(--muted);
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  margin-bottom: 0.45rem;
+}
+textarea {
+  width: 100%;
+  min-height: 110px;
+  resize: vertical;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  font: inherit;
+  font-size: 0.95rem;
+}
+textarea:focus { outline: none; border-color: var(--accent); }
+.btn-row { margin-top: 0.9rem; display: flex; gap: 0.6rem; flex-wrap: wrap; }
+.btn {
+  border-radius: 8px;
+  padding: 0.55rem 1rem;
+  border: 1px solid var(--accent);
+  background: transparent;
+  color: var(--accent);
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+.btn.revealed { color: var(--muted); border-color: var(--muted); }
+.model-answer { max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.45s ease, opacity 0.3s ease; }
+.model-answer.visible { max-height: 260px; opacity: 1; }
+.answer-label { color: var(--gold); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 600; margin: 1rem 0 0.45rem; }
+.answer-text {
+  font-family: 'Cormorant', serif;
+  font-size: 1.05rem;
+  line-height: 1.55;
+  background: rgba(201,184,150,0.06);
+  border-left: 2px solid var(--gold);
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+}
+.actions { display: flex; justify-content: center; gap: 0.75rem; margin: 1.2rem 0 0.3rem; flex-wrap: wrap; }
+.btn-save { background: var(--accent); color: var(--bg); font-weight: 600; }
+.btn-clear { color: var(--muted); border-color: var(--card-border); }
+.save-indicator { text-align: center; color: var(--success); font-size: 0.78rem; opacity: 0; transition: opacity 0.2s; }
+.save-indicator.show { opacity: 1; }
+@media (max-width: 720px) {
+  header { grid-template-columns: 1fr; }
+  .top-actions { justify-content: flex-start; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <div class="module-label">Module 1</div>
+      <h1>Transformer les demandes vagues</h1>
+      <p>Reformulez chaque question vague en une question de synastrie exploitable, puis comparez avec la suggestion.</p>
+    </div>
+    <div class="top-actions">
+      <button class="small-btn" onclick="document.documentElement.requestFullscreen?.()">Plein écran</button>
+      <button class="small-btn" onclick="window.open(location.href, '_blank')">Ouvrir dans un onglet</button>
+    </div>
+  </header>
+  <div class="progress-bar">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-text" id="progressText">0 / 5 réponses</div>
+  </div>
+  <main id="exercises"></main>
+  <div class="actions">
+    <button class="btn btn-save" onclick="saveAll()">Sauvegarder</button>
+    <button class="btn btn-clear" onclick="clearAll()">Effacer tout</button>
+  </div>
+  <div class="save-indicator" id="saveIndicator">Sauvegarde réussie</div>
+</div>
+<script>
+const EXERCISES = [
+  { id: 1, vague: "Sommes-nous faits l'un pour l'autre ?", model: "Qu'est-ce qui nous attire l'un vers l'autre, et ce qui nous éloigne ? La question n'est pas 'faits pour' mais 'pourquoi ensemble, et à quel prix ?'" },
+  { id: 2, vague: "Pourquoi cette relation me marque autant ?", model: "Qu'est-ce que cette personne active chez moi ? Quels besoins inconscients rencontre-t-elle en moi ?" },
+  { id: 3, vague: "Est-ce que cette relation peut durer ?", model: "Quels sont les facteurs de stabilité et de fragilité dans cette synastrie ? Que change le contexte de vie actuel ?" },
+  { id: 4, vague: "Je ne comprends pas pourquoi on s'est séparés", model: "Qu'est-ce qui a fait tenir la relation au début, et qu'est-ce qui a cessé de fonctionner ? La rupture est-elle inscrite dans la dynamique synastrique ou liée au contexte ?" },
+  { id: 5, vague: "Il me manque quelque chose dans ma relation", model: "Quel besoin spécifique n'est pas nourri ? Est-ce un besoin affectif (Lune), de valorisation (Vénus), d'action (Mars) ou de sécurité (Saturne) ?" }
+];
+const STORAGE_KEY = 'synastrie-module1-embed';
+function render() {
+  const saved = loadSaved();
+  document.getElementById('exercises').innerHTML = EXERCISES.map((ex, i) => `
+    <div class="exercise-card" id="card-${ex.id}">
+      <div class="card-number">Question <span class="num">${i + 1}</span> / 5</div>
+      <div class="vague-question">${ex.vague}</div>
+      <label for="answer-${ex.id}">Votre reformulation</label>
+      <textarea id="answer-${ex.id}" placeholder="Écrivez votre reformulation ici..." oninput="onInput()">${saved.answers[ex.id] || ''}</textarea>
+      <div class="btn-row"><button class="btn" id="reveal-${ex.id}" onclick="toggleReveal(${ex.id})">Voir la suggestion</button></div>
+      <div class="model-answer" id="model-${ex.id}"><div class="answer-label">Suggestion</div><div class="answer-text">${ex.model}</div></div>
+    </div>`).join('');
+  saved.revealed?.forEach(id => {
+    document.getElementById('model-' + id)?.classList.add('visible');
+    const btn = document.getElementById('reveal-' + id);
+    if (btn) { btn.textContent = 'Masquer la suggestion'; btn.classList.add('revealed'); }
+  });
+  updateProgress();
+}
+function onInput() { autoSave(); updateProgress(); }
+function toggleReveal(id) {
+  const el = document.getElementById('model-' + id);
+  const btn = document.getElementById('reveal-' + id);
+  const visible = el.classList.toggle('visible');
+  btn.textContent = visible ? 'Masquer la suggestion' : 'Voir la suggestion';
+  btn.classList.toggle('revealed', visible);
+  autoSave();
+}
+function updateProgress() {
+  let count = 0;
+  EXERCISES.forEach(ex => { if ((document.getElementById('answer-' + ex.id)?.value || '').trim().length > 5) count++; });
+  document.getElementById('progressFill').style.width = (count / EXERCISES.length) * 100 + '%';
+  document.getElementById('progressText').textContent = count + ' / 5 réponses';
+}
+function getAnswers() {
+  const answers = {};
+  EXERCISES.forEach(ex => { answers[ex.id] = document.getElementById('answer-' + ex.id)?.value || ''; });
+  return answers;
+}
+function getRevealed() {
+  return EXERCISES.filter(ex => document.getElementById('model-' + ex.id)?.classList.contains('visible')).map(ex => ex.id);
+}
+function autoSave() { localStorage.setItem(STORAGE_KEY, JSON.stringify({ answers: getAnswers(), revealed: getRevealed() })); }
+function saveAll() { autoSave(); const ind = document.getElementById('saveIndicator'); ind.classList.add('show'); setTimeout(() => ind.classList.remove('show'), 1800); }
+function loadSaved() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || { answers: {}, revealed: [] }; } catch(e) { return { answers: {}, revealed: [] }; } }
+function clearAll() { if (!confirm('Effacer toutes vos réponses ?')) return; localStorage.removeItem(STORAGE_KEY); render(); }
+render();
+</script>
+</body>
+</html>
