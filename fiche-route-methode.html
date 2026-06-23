@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Schéma - Méthodologie synastrie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,500;0,600;1,400&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f0f0f;
+  --card: #1a1816;
+  --text: #e8e4df;
+  --muted: #8b8580;
+  --soft: #6b6560;
+  --accent: #d4a574;
+  --pink: #e8b4b8;
+  --gold: #c9b896;
+  --blue: #7ba0b8;
+  --sage: #8aaa8a;
+  --red: #c87070;
+}
+
+@page { size: A4 landscape; margin: 8mm; }
+@media print {
+  body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .no-print { display: none !important; }
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'IBM Plex Sans', sans-serif;
+  display: flex;
+  justify-content: center;
+}
+
+.page {
+  width: 297mm;
+  height: 210mm;
+  padding: 8mm 9mm 6mm;
+}
+
+svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+svg text { font-family: 'IBM Plex Sans', sans-serif; }
+.display { font-family: 'Cormorant', serif; }
+
+.no-print {
+  position: fixed;
+  right: 16px;
+  bottom: 14px;
+}
+
+.no-print button {
+  padding: 8px 18px;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--accent);
+  font-family: 'IBM Plex Sans', sans-serif;
+  cursor: pointer;
+}
+</style>
+</head>
+<body>
+<div class="page">
+<svg viewBox="0 0 1120 760" role="img" aria-label="Schéma de la méthodologie d'analyse d'une synastrie">
+  <defs>
+    <linearGradient id="phase1" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#d4a574" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#d4a574" stop-opacity="0.04"/>
+    </linearGradient>
+    <linearGradient id="phase2" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#e8b4b8" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#e8b4b8" stop-opacity="0.04"/>
+    </linearGradient>
+    <linearGradient id="phase3" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#c9b896" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#c9b896" stop-opacity="0.04"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000" flood-opacity="0.28"/>
+    </filter>
+    <marker id="arrowA" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 Z" fill="#d4a574" opacity="0.55"/>
+    </marker>
+    <marker id="arrowP" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 Z" fill="#e8b4b8" opacity="0.55"/>
+    </marker>
+    <marker id="arrowG" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 Z" fill="#c9b896" opacity="0.55"/>
+    </marker>
+  </defs>
+
+  <!-- Header -->
+  <text x="560" y="35" text-anchor="middle" fill="#d4a574" font-size="10" font-weight="600" letter-spacing="3">ATELIER PRATIQUE DE SYNASTRIE</text>
+  <text class="display" x="560" y="72" text-anchor="middle" fill="#e8e4df" font-size="35" font-weight="600">Méthodologie d'analyse</text>
+  <text x="560" y="96" text-anchor="middle" fill="#8b8580" font-size="13">Le parcours d'apprentissage suit le chemin réel d'une consultation : cadrer, observer, synthétiser, pratiquer.</text>
+
+  <!-- Big phase lanes -->
+  <rect x="40" y="130" width="1040" height="150" rx="22" fill="url(#phase1)" stroke="#d4a574" stroke-opacity="0.18"/>
+  <rect x="40" y="330" width="1040" height="150" rx="22" fill="url(#phase2)" stroke="#e8b4b8" stroke-opacity="0.18"/>
+  <rect x="40" y="530" width="1040" height="145" rx="22" fill="url(#phase3)" stroke="#c9b896" stroke-opacity="0.18"/>
+
+  <!-- Phase labels -->
+  <rect x="60" y="150" width="145" height="38" rx="9" fill="#d4a574"/>
+  <text x="132" y="174" text-anchor="middle" fill="#0f0f0f" font-size="12" font-weight="700" letter-spacing="1.4">PARTIE 1</text>
+  <text class="display" x="60" y="215" fill="#e8e4df" font-size="25" font-weight="600">Comprendre</text>
+  <text x="60" y="238" fill="#8b8580" font-size="12">Modules 1 à 5</text>
+
+  <rect x="60" y="350" width="145" height="38" rx="9" fill="#e8b4b8"/>
+  <text x="132" y="374" text-anchor="middle" fill="#0f0f0f" font-size="12" font-weight="700" letter-spacing="1.4">PARTIE 2</text>
+  <text class="display" x="60" y="415" fill="#e8e4df" font-size="25" font-weight="600">Mécanique</text>
+  <text x="60" y="438" fill="#8b8580" font-size="12">Modules 6 à 8</text>
+
+  <rect x="60" y="550" width="145" height="38" rx="9" fill="#c9b896"/>
+  <text x="132" y="574" text-anchor="middle" fill="#0f0f0f" font-size="12" font-weight="700" letter-spacing="1.4">PARTIE 3</text>
+  <text class="display" x="60" y="615" fill="#e8e4df" font-size="25" font-weight="600">Restituer</text>
+  <text x="60" y="638" fill="#8b8580" font-size="12">Modules 9 à 11</text>
+
+  <!-- Phase 1 nodes -->
+  <g filter="url(#shadow)">
+    <rect x="250" y="155" width="155" height="92" rx="16" fill="#1a1816" stroke="#d4a574" stroke-opacity="0.25"/>
+    <circle cx="274" cy="179" r="14" fill="#d4a574"/>
+    <text x="274" y="184" text-anchor="middle" fill="#0f0f0f" font-size="13" font-weight="800">1</text>
+    <text class="display" x="298" y="177" fill="#e8e4df" font-size="18" font-weight="600">Cadre</text>
+    <text x="298" y="198" fill="#9a9590" font-size="10">Nature du lien</text>
+    <text x="298" y="213" fill="#9a9590" font-size="10">Question</text>
+    <text x="298" y="228" fill="#9a9590" font-size="10">Contexte</text>
+    <text x="390" y="236" text-anchor="end" fill="#6b6560" font-size="9" font-weight="600">MOD 2</text>
+  </g>
+  <line x1="405" y1="201" x2="440" y2="201" stroke="#d4a574" stroke-opacity="0.45" stroke-width="2" marker-end="url(#arrowA)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="445" y="155" width="155" height="92" rx="16" fill="#1a1816" stroke="#d4a574" stroke-opacity="0.25"/>
+    <circle cx="469" cy="179" r="14" fill="#d4a574"/>
+    <text x="469" y="184" text-anchor="middle" fill="#0f0f0f" font-size="13" font-weight="800">2</text>
+    <text class="display" x="493" y="177" fill="#e8e4df" font-size="18" font-weight="600">Profils</text>
+    <text x="493" y="198" fill="#9a9590" font-size="10">Besoins</text>
+    <text x="493" y="213" fill="#9a9590" font-size="10">Manière d'aimer</text>
+    <text x="493" y="228" fill="#9a9590" font-size="10">Désir / sécurité</text>
+    <text x="585" y="236" text-anchor="end" fill="#6b6560" font-size="9" font-weight="600">MOD 3</text>
+  </g>
+  <line x1="600" y1="201" x2="635" y2="201" stroke="#d4a574" stroke-opacity="0.45" stroke-width="2" marker-end="url(#arrowA)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="640" y="155" width="155" height="92" rx="16" fill="#1a1816" stroke="#c9b896" stroke-opacity="0.25"/>
+    <circle cx="664" cy="179" r="14" fill="#c9b896"/>
+    <text x="664" y="184" text-anchor="middle" fill="#0f0f0f" font-size="13" font-weight="800">3</text>
+    <text class="display" x="688" y="177" fill="#e8e4df" font-size="18" font-weight="600">Climat</text>
+    <text x="688" y="198" fill="#9a9590" font-size="10">Asc / Soleil / Lune</text>
+    <text x="688" y="213" fill="#9a9590" font-size="10">Compatibilité</text>
+    <text x="688" y="228" fill="#9a9590" font-size="10">Complémentarité</text>
+    <text x="780" y="236" text-anchor="end" fill="#6b6560" font-size="9" font-weight="600">MOD 4</text>
+  </g>
+  <line x1="795" y1="201" x2="830" y2="201" stroke="#c9b896" stroke-opacity="0.45" stroke-width="2" marker-end="url(#arrowA)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="835" y="155" width="155" height="92" rx="16" fill="#1a1816" stroke="#8aaa8a" stroke-opacity="0.25"/>
+    <circle cx="859" cy="179" r="14" fill="#8aaa8a"/>
+    <text x="859" y="184" text-anchor="middle" fill="#0f0f0f" font-size="13" font-weight="800">4</text>
+    <text class="display" x="883" y="177" fill="#e8e4df" font-size="18" font-weight="600">Activations</text>
+    <text x="883" y="198" fill="#9a9590" font-size="10">Maisons activées</text>
+    <text x="883" y="213" fill="#9a9590" font-size="10">Invité / hôte</text>
+    <text x="883" y="228" fill="#9a9590" font-size="10">Zones réveillées</text>
+    <text x="975" y="236" text-anchor="end" fill="#6b6560" font-size="9" font-weight="600">MOD 5</text>
+  </g>
+
+  <!-- Down arrow to phase 2 -->
+  <path d="M 990 247 C 1040 285 1040 325 990 360" fill="none" stroke="#e8b4b8" stroke-opacity="0.45" stroke-width="2" marker-end="url(#arrowP)"/>
+
+  <!-- Phase 2 nodes -->
+  <g filter="url(#shadow)">
+    <rect x="705" y="355" width="170" height="92" rx="16" fill="#1a1816" stroke="#e8b4b8" stroke-opacity="0.25"/>
+    <circle cx="729" cy="379" r="14" fill="#e8b4b8"/>
+    <text x="729" y="384" text-anchor="middle" fill="#0f0f0f" font-size="13" font-weight="800">5</text>
+    <text class="display" x="753" y="377" fill="#e8e4df" font-size="18" font-weight="600">Quotidien</text>
+    <text x="753" y="398" fill="#9a9590" font-size="10">Mercure : se parler</text>
+    <text x="753" y="413" fill="#9a9590" font-size="10">Vénus : s'aimer</text>
+    <text x="753" y="428" fill="#9a9590" font-size="10">Mars : désirer / conflit</text>
+    <text x="860" y="436" text-anchor="end" fill="#6b6560" font-size="9" font-weight="600">MOD 6</text>
+  </g>
+  <line x1="705" y1="401" x2="670" y2="401" stroke="#e8b4b8" stroke-opacity="0.45" stroke-width="2" marker-end="url(#arrowP)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="500" y="355" width="170" height="92" rx="16" fill="#1a1816" stroke="#7ba0b8" stroke-opacity="0.25"/>
+    <circle cx="524" cy="379" r="14" fill="#7ba0b8"/>
+    <text x="524" y="384" text-anchor="middle" fill="#0f0f0f" font-size="13" font-weight="800">6</text>
+    <text class="display" x="548" y="377" fill="#e8e4df" font-size="18" font-weight="600">Durée / crise</text>
+    <text x="548" y="398" fill="#9a9590" font-size="10">Jupiter / Saturne</text>
+    <text x="548" y="413" fill="#9a9590" font-size="10">Uranus / Neptune</text>
+    <text x="548" y="428" fill="#9a9590" font-size="10">Pluton</text>
+    <text x="655" y="436" text-anchor="end" fill="#6b6560" font-size="9" font-weight="600">MOD 7</text>
+  </g>
+  <line x1="500" y1="401" x2="465" y2="401" stroke="#7ba0b8" stroke-opacity="0.45" stroke-width="2" marker-end="url(#arrowP)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="295" y="355" width="170" height="92" rx="16" fill="#1a1816" stroke="#7ba0b8" stroke-opacity="0.25"/>
+    <circle cx="319" cy="379" r="14" fill="#7ba0b8"/>
+    <text x="319" y="384" text-anchor="middle" fill="#0f0f0f" font-size="13" font-weight="800">7</text>
+    <text class="display" x="343" y="377" fill="#e8e4df" font-size="18" font-weight="600">Parents / enfants</text>
+    <text x="343" y="398" fill="#9a9590" font-size="10">Attachement</text>
+    <text x="343" y="413" fill="#9a9590" font-size="10">Projections</text>
+    <text x="343" y="428" fill="#9a9590" font-size="10">Loyautés invisibles</text>
+    <text x="450" y="436" text-anchor="end" fill="#6b6560" font-size="9" font-weight="600">MOD 8</text>
+  </g>
+
+  <!-- Down arrow to phase 3 -->
+  <path d="M 295 447 C 245 485 245 525 295 560" fill="none" stroke="#c9b896" stroke-opacity="0.45" stroke-width="2" marker-end="url(#arrowG)"/>
+
+  <!-- Phase 3 nodes -->
+  <g filter="url(#shadow)">
+    <rect x="250" y="555" width="170" height="92" rx="16" fill="#1a1816" stroke="#c9b896" stroke-opacity="0.25"/>
+    <circle cx="274" cy="579" r="14" fill="#c9b896"/>
+    <text x="274" y="584" text-anchor="middle" fill="#0f0f0f" font-size="13" font-weight="800">8</text>
+    <text class="display" x="298" y="577" fill="#e8e4df" font-size="18" font-weight="600">Synthèse</text>
+    <text x="298" y="598" fill="#9a9590" font-size="10">Hiérarchiser</text>
+    <text x="298" y="613" fill="#9a9590" font-size="10">Formuler</text>
+    <text x="298" y="628" fill="#9a9590" font-size="10">Restituer</text>
+    <text x="405" y="636" text-anchor="end" fill="#6b6560" font-size="9" font-weight="600">MOD 9</text>
+  </g>
+  <line x1="420" y1="601" x2="455" y2="601" stroke="#c9b896" stroke-opacity="0.45" stroke-width="2" marker-end="url(#arrowG)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="460" y="555" width="170" height="92" rx="16" fill="#1a1816" stroke="#c9b896" stroke-opacity="0.25"/>
+    <circle cx="484" cy="579" r="14" fill="#c9b896"/>
+    <text x="484" y="584" text-anchor="middle" fill="#0f0f0f" font-size="13" font-weight="800">9</text>
+    <text class="display" x="508" y="577" fill="#e8e4df" font-size="18" font-weight="600">Cas complets</text>
+    <text x="508" y="598" fill="#9a9590" font-size="10">Appliquer toute</text>
+    <text x="508" y="613" fill="#9a9590" font-size="10">la méthode</text>
+    <text x="508" y="628" fill="#9a9590" font-size="10">avec correction</text>
+    <text x="615" y="636" text-anchor="end" fill="#6b6560" font-size="9" font-weight="600">MOD 10</text>
+  </g>
+  <line x1="630" y1="601" x2="665" y2="601" stroke="#c9b896" stroke-opacity="0.45" stroke-width="2" marker-end="url(#arrowG)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="670" y="555" width="170" height="92" rx="16" fill="#1a1816" stroke="#c9b896" stroke-opacity="0.25"/>
+    <circle cx="694" cy="579" r="14" fill="#c9b896"/>
+    <text x="694" y="584" text-anchor="middle" fill="#0f0f0f" font-size="11" font-weight="800">10</text>
+    <text class="display" x="718" y="577" fill="#e8e4df" font-size="18" font-weight="600">Éthique</text>
+    <text x="718" y="598" fill="#9a9590" font-size="10">Ne pas condamner</text>
+    <text x="718" y="613" fill="#9a9590" font-size="10">Ne pas décider</text>
+    <text x="718" y="628" fill="#9a9590" font-size="10">Formuler juste</text>
+    <text x="825" y="636" text-anchor="end" fill="#6b6560" font-size="9" font-weight="600">MOD 11</text>
+  </g>
+
+  <!-- Exercise strip -->
+  <rect x="145" y="700" width="830" height="42" rx="14" fill="rgba(212,165,116,0.04)" stroke="rgba(212,165,116,0.12)"/>
+  <text x="170" y="726" fill="#d4a574" font-size="10" font-weight="700" letter-spacing="1.3">EXERCICES</text>
+  <circle cx="290" cy="721" r="5" fill="#d4a574"/>
+  <text x="302" y="725" fill="#9a9590" font-size="10">Cas en étapes</text>
+  <circle cx="430" cy="721" r="5" fill="#e8b4b8"/>
+  <text x="442" y="725" fill="#9a9590" font-size="10">Que diriez-vous ?</text>
+  <circle cx="610" cy="721" r="5" fill="#7ba0b8"/>
+  <text x="622" y="725" fill="#9a9590" font-size="10">Synastrie à l'aveugle</text>
+  <circle cx="815" cy="721" r="5" fill="#c9b896"/>
+  <text x="827" y="725" fill="#9a9590" font-size="10">Spot l'erreur</text>
+</svg>
+</div>
+
+<div class="no-print"><button onclick="window.print()">Exporter en PDF</button></div>
+</body>
+</html>
